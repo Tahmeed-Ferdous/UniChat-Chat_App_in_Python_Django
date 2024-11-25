@@ -1,0 +1,3 @@
+# Ignore Python cache files
+*.pyc
+__pycache__/git remote add origin https://github.com/Tahmeed-Ferdous/Skill-Circle---BRAC-based-Social-Media-Management.git

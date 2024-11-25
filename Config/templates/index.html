@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h4>Latest posts</h4>
+  <div class="divider"></div>
+
+  <div class="row">
+    {% for post_item in post_items %}
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-image">
+            {% if post_item.picture %}
+              <a href="{{ post_item.get_absolute_url }}"><img src="{{ post_item.picture.url }}"></a>
+            {% else %}
+              <img src="{% static 'img/logo.png' %}">
+            {% endif %}
+            <a href="{{ post_item.get_absolute_url }}"><span class="card-title">{{ post_item.posted.url }}</span></a>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img src="{% static 'img/logo.png' %}" alt="placeholder image">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">Tahmeed Ferdous</p>
+                <p class="subtitle is-6">@{{ post_item.user.username }}</p>
+              </div>
+            </div>
+
+            <div class="content">
+              {{ post_item.caption }}
+              <p>
+                  <a href="{{ tag.get_absolute_url }}">#{{ post_item.tags }}</a>
+              </p>
+              <br>
+              <time datetime="2016-1-1">{{ post_item.posted }}</time>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+
+{% block pagination %}
+  <ul class="pagination center-align">
+    {% if articles.has_previous %}
+      <a href="?page={{ articles.previous_page_number }}" class="waves-effect waves-light btn"><i class="material-icons left">arrow_back</i>Back</a>
+    {% endif %}
+
+{% if articles.has_next %}
+<a href="?page={{ articles.next_page_number }}" class="waves-effect waves-light btn"><i class="material-icons right">add</i>Load more</a>
+  </ul>
+{% endif %} 
+
+{% endblock %}
+
+
+
+ 
