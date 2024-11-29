@@ -8,7 +8,7 @@ from django.contrib.auth import update_session_auth_hash
 from authy.models import Profile
 from django.template import loader
 from django.http import HttpResponse
-
+from django.contrib.auth import logout
 from django.core.paginator import Paginator
 
 # Create your views here.
@@ -30,6 +30,10 @@ def UserProfile(request, username):
 	}
 
 	return HttpResponse(template.render(context, request))
+
+def custom_logout_view(request):
+    logout(request)
+    return redirect('login')
 
 
 def Signup(request):

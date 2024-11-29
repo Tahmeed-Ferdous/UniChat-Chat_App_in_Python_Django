@@ -19,7 +19,7 @@
       <header>
         <div class="image-text">
           <span class="image">
-            <img src="{% static 'img/logo.png' %}" alt="logo">
+            <a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="logo"></a>
           </span>
           <div class="text header-text">
             <span class="name">Skill Circle</span>
@@ -84,8 +84,8 @@
               <span class="text nav-text">Settings</span>
             </a>
           </li>
-          <li class="">
-            <a href="#">
+          <li class="nav-link">
+            <a href="{% url 'logout' %}">
               <i class='bx bx-log-out icon' ></i>
               <span class="text nav-text">Logout</span>
             </a>

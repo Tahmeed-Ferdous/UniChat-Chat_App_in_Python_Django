@@ -36,8 +36,8 @@ class Post(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	likes = models.IntegerField(default=0)
      
-	# def get_absolute_url(self):
-		# return reverse('postdetails', args=[str(self.id)])
+	def get_absolute_url(self):
+		return reverse('postdetails', args=[str(self.id)])
 
      
 class Follow(models.Model):
