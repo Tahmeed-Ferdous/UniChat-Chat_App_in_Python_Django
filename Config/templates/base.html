@@ -47,8 +47,8 @@
             </li>
             <li class="nav-link">
               <a href="#">
-                <i class='bx bx-home-alt icon'></i>
-                <span class="text nav-text">Home</span>
+                <i class='bx bx-bell icon' ></i>
+                <span class="text nav-text">Notifications</span>
               </a>
             </li>
             <li class="nav-link">
@@ -71,7 +71,7 @@
             </li>
             <li class="nav-link">
               <a href="{% url 'newpost' %}">
-                <i class='bx bx-bell icon' ></i>
+                <i class='bx bx-upload icon'></i>
                 <span class="text nav-text">Upload</span>
               </a>
             </li>
@@ -105,9 +105,13 @@
       </div>
     </nav>
     <!-- \\\\\\\\\\\\\\\\\\\\\\\\Side Bar Ends From Here/////////////////// -->
+    
     <main>
       <section class="home">
           <div class="text">
+            {% block banner %}
+            {% endblock %}
+
             {% block content %}
             {% endblock %}
 

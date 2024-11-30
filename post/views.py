@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 
-from post.models import Stream, Post, Tag
+from post.models import Stream, Post, Tag, Likes
 from django.contrib.auth.decorators import login_required
 from post.forms import NewPostForm
 
@@ -70,3 +70,40 @@ def NewPost(request):
 	}
 
 	return render(request, 'newpost.html', context)
+
+
+@login_required
+def tags(request, tag_slug):
+	tag = get_object_or_404(Tag, slug=tag_slug)
+	posts = Post.objects.filter(tags=tag).order_by('-posted')
+
+	template = loader.get_template('tags.html')
+
+	context = {
+		'posts':posts,
+		'tag':tag,
+	}
+
+	return HttpResponse(template.render(context, request))
+
+
+@login_required
+def like(request, post_id):
+	user = request.user
+	post = Post.objects.get(id=post_id)
+	current_likes = post.likes
+	liked = Likes.objects.filter(user=user, post=post).count()
+
+	if not liked:
+		like = Likes.objects.create(user=user, post=post)
+		#like.save()
+		current_likes = current_likes + 1
+
+	else:
+		Likes.objects.filter(user=user, post=post).delete()
+		current_likes = current_likes - 1
+
+	post.likes = current_likes
+	post.save()
+
+	return HttpResponseRedirect(reverse('postdetails', args=[post_id]))

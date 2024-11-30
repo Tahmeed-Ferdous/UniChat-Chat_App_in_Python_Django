@@ -279,7 +279,7 @@ body.dark .switch::before {
 main .home {
     position: relative;
     left: 250px;
-    width: calc(100%-250px);
+    width: calc(100% - 250px);
     background: var(--body-color);
     transition: var(--tran-05);
 }
@@ -293,8 +293,8 @@ main .home .text {
 }
 
 .sidebar.close ~ main .home {
-    left: 88px;
-    width: calc(100%-88px);
+    left: 50px;
+    width: calc(100% - 50px);
 }
 body {
     overflow-x: hidden;
