@@ -21,11 +21,15 @@
                 <div class="d-flex align-items-center mb-3">
                     <img src="{% static 'img/logo.png' %}" alt="User Avatar" class="rounded-circle me-3" style="width: 50px; height: 50px;">
                     <div>
-                        <h5 class="mb-0">Tahmeed Ferdous</h5>
+                        <h5 class="mb-0">Brac University</h5>
                         <p class="text-muted mb-0">@{{ post.user.username }}</p>
                     </div>
                     <div class="ms-auto">
-                        <a href="" class="btn btn-outline-secondary btn-sm me-2"><i class='bx bxs-bookmarks'></i> Save</a>
+                        {% if favorited is True %}
+                        <a href="{% url 'postfavorite' post.id %}" class="btn btn-outline-secondary btn-sm me-2"><i class='bx bxs-bookmarks'></i>Remove Post</a>
+                        {% else %}
+                        <a href="{% url 'postfavorite' post.id %}" class="btn btn-outline-secondary btn-sm me-2"><i class='bx bxs-bookmarks'></i>Save Post</a>
+                        {% endif %}
                         <a href="{% url 'postlike' post.id %}" class="btn btn-outline-primary btn-sm">
                             <i class='bx bxs-badge-check'></i> {{ post.likes }} Badges
                         </a>

@@ -9,16 +9,53 @@
     <div class="col s12 m12">
       <div class="card">
         <div class="card-image">
-          <img src="{% static 'img/profile_banner.jpg' %}">
+          <img src="{% static 'media/def.png' %}">
           {% if profile.picture %}
           <a href="{{ profile.get_absolute_url }}"><img id="img-circle-custom-profile" src="{{ profile.picture.url }}"></a>
           {% else %}
           <img id="img-circle-custom-profile" src="{% static 'img/person.jpg' %}">
           {% endif %}
           <h1 style="font-weight: bold;" class="card-title">{% if profile.first_name %}{{ profile.first_name }} {{ profile.last_name }}{% endif %}</h1>
+          <h2>@{{ profile.user }}</h2>
+          {% if user.is_authenticated and user != profile.user %}
+          <div class="media-right">
+            {% if follow_status == True %}
+            <a href="{% url 'follow' profile.user 0 %}" class="button is-danger">Unfollow</a>
+            {% else %}
+            <a href="{% url 'follow' profile.user 1 %}" class="button is-success">Follow</a>
+            {% endif %}
+          </div>
+          {% endif %}
         </div>
 
-
+        <div class="container mt-5">
+          <div class="row text-center">
+            <!-- Posts Section -->
+            <div class="col-4">
+              <h6 class="text-muted">Posts</h6>
+              <h4>{{ posts_count }}</h4>
+            </div>
+            <!-- Following Section -->
+            <div class="col-4">
+              <h6 class="text-muted">Following</h6>
+              <h4>{{ following_count }}</h4>
+            </div>
+            <!-- Followers Section -->
+            <div class="col-4">
+              <h6 class="text-muted">Followers</h6>
+              <h4>{{ followers_count }}</h4>
+            </div>
+          </div>
+          <!-- Subtitle Section -->
+          <div class="row mt-4">
+            <div class="col text-center">
+              <p class="text-secondary">
+                {% if profile.profile_info %}{{ profile.profile_info }}{% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+        
 
 
         <div class="card-action">
@@ -43,31 +80,38 @@
           {% endif %}
           
         </div>
-        <div class="card-content">
-        	<h1 style="font-weight: bold;" class="card-title">Favorites articles</h1>
+        <div class="tabs is-centered">
+          <ul>
+            <li class="{% if url_name == 'profile' %}is-active{% endif %}">
+              <a href="{% url 'profile' profile.user %}"><i class='bx bx-export'></i>Posts</a>
+            </li>
+            <li class="{% if url_name == 'profilefavorites' %}is-active{% endif %}">
+              <a href="{% url 'profilefavorites' profile.user %}"><i class='bx bx-save'></i>Saved</a>
+            </li>
+          </ul>
+        </div>
 
         	<div class="row">
-				   
-				{% for article in articles %}
+				  {% for post in posts %}
 				   <div class="col s12 m4">
 				      <div class="card">
 				        <div class="card-image">
-				        {% if article.picture %}
-				          <a href="{{ article.get_absolute_url }}"><img src="{{ article.picture.url }}"></a>
+				        {% if post.picture %}
+				          <a href="{{ post.get_absolute_url }}"><img src="{{ post.picture.url }}"></a>
         				{% else %}
-         					<img src="{% static 'img/default-thumbnail.jpg' %}">
+         					<img src="{% static 'media/def.png' %}">
         				{% endif %}
-        					<a href="{{ article.get_absolute_url }}"><span class="card-title">{{ article.title }}</span></a>
+        					<a href="{{ post.get_absolute_url }}"><span class="card-title">{{ post.title }}</span></a>
 				        </div>
 				        <div class="card-content">
-				          {{ article.content|truncatechars:150 | safe }}
+				          {{ post.content|truncatechars:150 | safe }}
 				        </div>
 				        <div class="card-action">
-          					<a href="{{ article.get_absolute_url }}">Read more</a>
+          					<a href="{{ post.get_absolute_url }}">Read more</a>
         				</div>
 				    </div>
 				  </div>
-				{% endfor %}
+				  {% endfor %}
           
         </div>
       </div>
@@ -80,12 +124,12 @@
 
 {% block pagination %}
   <ul class="pagination center-align">
-    {% if articles.has_previous %}
-      <a href="?page={{ articles.previous_page_number }}" class="waves-effect waves-light btn"><i class="material-icons left">arrow_back</i>Back</a>
+    {% if posts.has_previous %}
+      <a href="?page={{ posts.previous_page_number }}" class="waves-effect waves-light btn"><i class="material-icons left">arrow_back</i>Back</a>
     {% endif %}
 
-{% if articles.has_next %}
-<a href="?page={{ articles.next_page_number }}" class="waves-effect waves-light btn"><i class="material-icons right">add</i>Load more</a>
+{% if posts.has_next %}
+<a href="?page={{ posts.next_page_number }}" class="waves-effect waves-light btn"><i class="material-icons right">add</i>Load more</a>
   </ul>
 {% endif %} 
 
