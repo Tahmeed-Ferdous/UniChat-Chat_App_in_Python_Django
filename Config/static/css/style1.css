@@ -300,4 +300,18 @@ body {
     overflow-x: hidden;
 }
 
+.card-body .text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .card-text.text-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limits text to 3 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+
 

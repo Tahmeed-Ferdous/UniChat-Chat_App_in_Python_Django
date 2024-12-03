@@ -2,53 +2,66 @@
 {% load static %}
 
 {% block content %}
-  <h4>Latest posts</h4>
-  <div class="divider"></div>
+  <h4 class="text-center mb-2 mt-1">Latest Posts</h4>
+  <div class="divider mb-2"></div>
 
   <div class="container-fluid py-3">
     <div class="row g-4">
       {% for post_item in post_items %}
         <div class="col-12 col-md-6 col-lg-4">
-          <div class="card h-100">
+          <div class="card h-100 shadow-sm">
             <div class="card-image">
               {% if post_item.picture %}
                 <a href="{{ post_item.get_absolute_url }}">
-                  <img src="{{ post_item.picture.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Post Image">
+                  <img src="{{ post_item.picture.url }}" 
+                       class="card-img-top" 
+                       style="height: 200px; object-fit: cover;" 
+                       alt="Post Image">
                 </a>
               {% else %}
-                <img src="{% static 'media/def.png' %}" class="card-img-top" alt="Default Image">
+                <img src="{% static 'media/def.png' %}" 
+                     class="card-img-top" 
+                     alt="Default Image">
               {% endif %}
             </div>
             <div class="card-body">
-              <div class="d-flex align-items-center mb-3">
-                <img src="{% static 'img/logo.png' %}" alt="Logo" class="rounded-circle me-3" style="width: 48px; height: 48px;">
-                <div>
-                  <h5 class="mb-0">BRAC University</h5>
-                  <small class="text-muted">@{{ post_item.user.username }}</small>
-                </div>
-                <div class="media-right">
-                  <a href="{% url 'postlike' post_item.id %}"><i class='bx bxs-badge-check' >{{ post_item.likes }} Badges</i></a>
+              <div class="d-flex align-items-center mb-2">
+                {% if post_item.user.picture %}
+                  <img class="rounded-circle img-fluid" src="{{ post_item.user.picture.url }}" alt="Logo" class="rounded-circle me-3" style="width: 48px; height: 48px;" >>
+                {% else %}
+                <img src="{% static 'img/logo.png' %}" 
+                  alt="Logo" 
+                  class="rounded-circle me-3" 
+                  style="width: 48px; height: 48px;">
+                {% endif %}
+                <div class="flex-grow-1">
+                  <h4 class="text-truncate">{% if post_item.user.first_name %}{{ post_item.user.first_name }} {{ post_item.user.last_name }}{% else %}BRAC University{% endif %}</h4>
+                  <small class="text-muted text-truncate fs-5">@{{ post_item.user.username }}</small>
                 </div>
               </div>
-              <p class="card-text">
+              <p class="card-text text-truncate mb-3 fs-4" 
+                 style="max-height: 4.5em; overflow: hidden; line-height: 1.5em;">
                 {{ post_item.caption }}
               </p>
-              <p class="text-muted mb-0">
-                {% for tag in post.tags.all %}
-                <a href="{{ tag.get_absolute_url }}" class="text-decoration-none">#{{ tag }}</a>
+              <p class="text-muted small">
+                {% for tag in post_item.tags.all %}
+                  <a href="{{ tag.get_absolute_url }}" class="text-decoration-none">#{{ tag }}</a>
                 {% endfor %}
               </p>
             </div>
-            <div class="card-footer text-muted small">
-              Posted on <time datetime="2016-1-1">{{ post_item.posted }}</time>
+            <div class="card-footer d-flex justify-content-between align-items-center text-muted small">
+              <span>Posted on <time datetime="2016-1-1">{{ post_item.posted }}</time></span>
+              <a href="{% url 'postlike' post_item.id %}" class="text-decoration-none">
+                <i class='bx bxs-badge-check me-1'></i>{{ post_item.likes }} Badges
+              </a>
             </div>
           </div>
         </div>
       {% endfor %}
     </div>
   </div>
-  
 {% endblock %}
+
 
 
 {% block pagination %}
