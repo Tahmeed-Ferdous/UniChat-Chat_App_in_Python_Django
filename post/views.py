@@ -9,6 +9,9 @@ from authy.models import Profile
 from django.urls import reverse
 from authy.models import Profile
 
+from comment.models import Comment
+from comment.forms import CommentForm
+
 @login_required
 def index(request):
 	user = request.user
@@ -35,6 +38,21 @@ def PostDetails(request, post_id):
 	user = request.user
 	profile = Profile.objects.get(user=user)
 	favorited = False
+
+    #comment
+	comments = Comment.objects.filter(post=post).order_by('date')
+
+	#Comments Form
+	if request.method == 'POST':
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			comment = form.save(commit=False)
+			comment.post = post
+			comment.user = user
+			comment.save()
+			return HttpResponseRedirect(reverse('postdetails', args=[post_id]))
+	else:
+		form = CommentForm()
 	
 	if request.user.is_authenticated:
 		profile = Profile.objects.get(user=user)
@@ -45,6 +63,8 @@ def PostDetails(request, post_id):
 	context = {
 		'post':post,
 		'favorited':favorited,
+		'form':form,
+		'comments':comments,
 	}
 	return HttpResponse(template.render(context, request))
 
