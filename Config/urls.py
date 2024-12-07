@@ -17,7 +17,7 @@ urlpatterns = [
     path('<username>/', UserProfile, name='profile'),
     path('<username>/saved', UserProfile, name='profilefavorites'),
     path('<username>/follow/<option>', follow, name='follow'),
-    
+
     # Other URLs can be added as necessary
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
