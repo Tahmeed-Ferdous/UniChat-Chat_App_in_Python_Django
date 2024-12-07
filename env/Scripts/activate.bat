@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\HTML CSS JS PY Projects\Django Basics and Projects\SkillCircle\env
+set VIRTUAL_ENV=C:\Users\user\Skill-Circle---BRAC-based-Social-Media-Management\env
 
 if not defined PROMPT set PROMPT=$P$G
 
