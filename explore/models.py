@@ -6,6 +6,9 @@ class ProfileSuggestion(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='suggested_profiles')
     suggestion_for = models.ForeignKey(User, on_delete=models.CASCADE, related_name='suggestions')
 
+    class Meta:
+        app_label = 'explore'
+
     def __str__(self):
         return f"Suggestion for {self.suggestion_for.username} by {self.user.username}"
 
