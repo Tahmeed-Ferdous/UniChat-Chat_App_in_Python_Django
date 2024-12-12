@@ -79,3 +79,37 @@ def checkDirects(request):
 		directs_count = Message.objects.filter(user=request.user, is_read=False).count()
 
 	return {'directs_count':directs_count}
+
+@login_required
+def UserSearch(request):
+	query = request.GET.get("q")
+	context = {}
+	
+	if query:
+		users = User.objects.filter(Q(username__icontains=query))
+
+		#Pagination
+		paginator = Paginator(users, 6)
+		page_number = request.GET.get('page')
+		users_paginator = paginator.get_page(page_number)
+
+		context = {
+				'users': users_paginator,
+			}
+	
+	template = loader.get_template('direct/search_user.html')
+	
+	return HttpResponse(template.render(context, request))
+
+
+@login_required
+def NewConversation(request, username):
+	from_user = request.user
+	body = ''
+	try:
+		to_user = User.objects.get(username=username)
+	except Exception as e:
+		return redirect('usersearch')
+	if from_user != to_user:
+		Message.send_message(from_user, to_user, body)
+	return redirect('inbox')
