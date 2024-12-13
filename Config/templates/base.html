@@ -64,7 +64,7 @@
               <a href="{% url 'directs' request.user %}">
                 <i class='bx bx-chat icon' ></i>
                 <span class="text nav-text">Messages</span>
-                {% if directs_counts%}
+                {% if directs_counts %}
                 <span class="text nav-text">{{ directs_count }}</span>
                 {% endif %}
               </a>
@@ -78,7 +78,7 @@
             <li class="nav-link">
               <a href="{% url 'newpost' %}">
                 <i class='bx bx-upload icon'></i>
-                <span class="text nav-text">Upload</span>
+                <span class="text nav-text">New Upload</span>
               </a>
             </li>
           </ul>
