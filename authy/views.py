@@ -18,22 +18,37 @@ from django.db import transaction
 # Create your views here.
 def UserProfile(request, username):
 	user = get_object_or_404(User, username=username)
-	profile = Profile.objects.get(user=user)
+	# profile = Profile.objects.get(user=user)
+	# 1
+	profile = Profile.objects.raw("SELECT * FROM profile WHERE user_id = %s LIMIT 1", [user.id])
+
 	url_name = resolve(request.path).url_name
 	
 	if url_name == 'profile':
-		posts = Post.objects.filter(user=user).order_by('-posted')
+		# posts = Post.objects.filter(user=user).order_by('-posted')\
+		# 2
+		posts = Post.objects.raw("SELECT * FROM post WHERE user_id = %s ORDER BY posted DESC", [user.id])
+
 
 	else:
 		posts = profile.favorites.all()
 
 	#Profile info box
-	posts_count = Post.objects.filter(user=user).count()
-	following_count = Follow.objects.filter(follower=user).count()
-	followers_count = Follow.objects.filter(following=user).count()
+	# posts_count = Post.objects.filter(user=user).count()
+	# 3
+	posts_count = Post.objects.raw("SELECT COUNT(*) FROM post WHERE user_id = %s", [user.id])
+
+	# following_count = Follow.objects.filter(follower=user).count()
+	# 4
+	following_count=Follow.objects.raw("SELECT COUNT(*) FROM follow WHERE user_id =%s",[user.id])
+	# followers_count = Follow.objects.filter(following=user).count()
+	#5
+	followers_count=Follow.objects.raw("SELECT COUNT(*) FROM follow WHERE user_id=%s",[user.id])
 
 	#follow status
-	follow_status = Follow.objects.filter(following=user, follower=request.user).exists()
+	# follow_status = Follow.objects.filter(following=user, follower=request.user).exists()
+	# 6
+	follow_status = Follow.objects.raw("SELECT 1 FROM follow WHERE following_id = %s AND follower_id = %s LIMIT 1", [user.id, request.user.id]).exists()
 
 	#Pagination
 	paginator = Paginator(posts, 8)
