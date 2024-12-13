@@ -140,9 +140,8 @@ def like(request, post_id):
 
 @login_required
 def favorite(request, post_id):
-	user = request.user
 	post = Post.objects.get(id=post_id)
-	profile = Profile.objects.get(user=user)
+	profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [request.user.id])[0]
 
 	if profile.favorites.filter(id=post_id).exists():
 		profile.favorites.remove(post)
