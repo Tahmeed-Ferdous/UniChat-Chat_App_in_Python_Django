@@ -95,6 +95,32 @@
             font-size: 16px; 
             color: #999;  
         }
+        /* Style for all input fields */
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 75%;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            padding: 8px 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 14px;
+        }
+    
+        /* Focus State for better interactivity */
+        input:focus {
+            outline: none;
+            border-color: #0d6efd;
+            box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+        }
+    
+        /* Label styling */
+        .form-label {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 600;
+        }
 
     </style>
 </head>
@@ -148,26 +174,26 @@
                 <h2 class="text-center mb-4">Create Account</h2>
 
                 <!-- Username Field -->
-                <div class="mb-3">
-                    <label for="id_username" class="form-label">Username</label>
+                <div class="text-center mb-3">
+                    <label for="id_username" class="form-label">Username</label><br>
                     {{ form.username }}
                 </div>
 
                 <!-- Email Field -->
-                <div class="mb-3">
-                    <label for="id_email" class="form-label">Email</label>
+                <div class="text-center mb-3">
+                    <label for="id_email" class="form-label">Email</label><br>
                     {{ form.email }}
                 </div>
 
                 <!-- Password Field -->
-                <div class="mb-3">
-                    <label for="id_password" class="form-label">Password</label>
+                <div class="text-center mb-3">
+                    <label for="id_password" class="form-label">Password</label><br>
                     {{ form.password }}
                 </div>
 
                 <!-- Confirm Password Field -->
-                <div class="mb-3">
-                    <label for="id_confirm_password" class="form-label">Re-type Password</label>
+                <div class="text-center mb-4">
+                    <label for="id_confirm_password" class="form-label">Re-type Password</label><br>
                     {{ form.confirm_password }}
                 </div>
 
