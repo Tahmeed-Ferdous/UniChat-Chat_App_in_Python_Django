@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <h1 class="text-center mb-4">Weekly Schedule</h1>
     <table class="table table-bordered text-center">
-        <thead class="table-light">
+        <thead class="table-light fs-5">
             <tr>
                 <th scope="col">Time</th>
                 <th scope="col">Monday</th>
@@ -18,7 +18,7 @@
                 <th scope="col">Saturday</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="fs-5">
             <tr>
                 <td>8:00 - 9:30</td>
                 <td></td>
@@ -76,6 +76,52 @@
         </tbody>
     </table>
 </div>
+
+
+
+    <div class="container py-5">
+        <!-- Form Section -->
+        <form method="POST" enctype="multipart/form-data" class="mb-4 p-4 bg-white shadow-sm rounded">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label fs-5">Course Code</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter course name">
+            </div>
+            <div class="mb-3">
+                <label for="task" class="form-label fs-5">Task : Due Date</label>
+                <input type="text" id="task" name="task" class="form-control" placeholder="Enter task and due date">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Add Task</button>
+        </form>
+
+        <!-- Tasks Section -->
+        <h4 class="mb-3">Tasks</h4>
+        <table class="table table-bordered bg-white shadow-sm">
+            <thead class="table-light fs-6">
+                <tr>
+                    <th>Course Name</th>
+                    <th>Task : Due Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="fs-5">
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.task }}</td>
+                    <td>
+                        <a href="{% url 'edit_task' task.id %}" class="btn btn-sm btn-default">Edit</a>
+                        <form method="POST" action="{% url 'delete_task' task.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 
 
 {% endblock %}
