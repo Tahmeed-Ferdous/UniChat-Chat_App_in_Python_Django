@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('post/', include('post.urls')),
     path('', include('authy.urls')),
+    path('explore/', include('explore.urls', namespace='explore')),
     path('direct/', include('direct.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('notifications/', include('notifications.urls')),
