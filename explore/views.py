@@ -11,9 +11,13 @@ def explore_page(request):
     notifications = Notification.objects.filter(user=request.user)
     friends_following = Friend.objects.filter(follower=request.user)
 
+    # Debugging prints to check data
+    print("Logged in user:", request.user.username)
     print("Profile Suggestions:", profile_suggestions) 
     print("Notifications:", notifications) 
     print("Friends Following:", friends_following)
+    for friend in friends_following:
+        print(f"{request.user.username} is following {friend.followed.username}")
 
     context = {
         'profile_suggestions': profile_suggestions,
