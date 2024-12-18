@@ -1,37 +1,41 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import ProfileSuggestion, Notification, Friend
 from post.models import Post
+from .models import Follow
 from django.db.models import Q
+from .models import Friend
+
 
 @login_required
 def explore_page(request):
-    profile_suggestions = ProfileSuggestion.objects.filter(user=request.user)
-    notifications = Notification.objects.filter(user=request.user)
-    friends_following = Friend.objects.filter(follower=request.user)
+    # Get users the logged-in user is following
+    following_profiles = Follow.objects.filter(follower=request.user)
+    followed_users = [friend.following for friend in following_profiles]  # Followed users are in `friend.following`
 
-    # Debugging prints to check data
-    print("Logged in user:", request.user.username)
-    print("Profile Suggestions:", profile_suggestions) 
-    print("Notifications:", notifications) 
-    print("Friends Following:", friends_following)
-    for friend in friends_following:
-        print(f"{request.user.username} is following {friend.followed.username}")
+    # Get posts from the users the current user is following
+    posts = Post.objects.filter(user__in=followed_users).order_by('-posted')
+
+    # Profile suggestions: excluding users the current user is following
+    followed_user_ids = [user.id for user in followed_users]  # Extract the IDs of followed users
+    suggestions = User.objects.exclude(id__in=followed_user_ids)
 
     context = {
-        'profile_suggestions': profile_suggestions,
-        'notifications': notifications,
-        'friends_following': friends_following,
+        'following_profiles': following_profiles,
+        'posts': posts,
+        'suggestions': suggestions,
     }
+    
     return render(request, 'explore/explore.html', context)
 
 @login_required
 def profile_suggestions(request):
-    suggestions = User.objects.exclude(id__in=[f.followed.id for f in Friend.objects.filter(follower=request.user)])
+    # Profile suggestions: excluding users the current user is following
+    following_profiles = Follow.objects.filter(follower=request.user)
+    suggestions = User.objects.exclude(id__in=[f.following.id for f in following_profiles])
+
     context = {
-        'suggestions': suggestions if suggestions else [],
-        'no_suggestions': not suggestions.exists(),
+        'suggestions': suggestions
     }
     return render(request, 'explore/profile_suggestions.html', context)
 
@@ -39,20 +43,23 @@ def profile_suggestions(request):
 def search_posts(request):
     query = request.GET.get('q')
     if query:
-        posts = Post.objects.filter(
-            Q(caption__icontains(query)) | Q(tags__title__icontains(query))
-        ).distinct()
+        posts = Post.objects.filter(Q(caption__icontains=query) | Q(tags__title__icontains=query)).distinct()
     else:
         posts = Post.objects.none()
+
     context = {
-        'posts': posts,
+        'posts': posts
     }
     return render(request, 'explore/search_posts.html', context)
 
 @login_required
 def filter_posts(request, category):
+    # Filter posts based on the selected category (e.g., 'Blockchain')
     posts = Post.objects.filter(tags__title__iexact=category)
+
     context = {
         'posts': posts,
+        'category': category,  # Pass the category to the template
     }
     return render(request, 'explore/filter_posts.html', context)
+
