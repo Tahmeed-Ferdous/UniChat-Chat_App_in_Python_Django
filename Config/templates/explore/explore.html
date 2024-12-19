@@ -50,14 +50,25 @@
 
             <!-- Profile Suggestions -->
             <section id="profile-suggestions">
-                <h4>Profile Suggestions</h4>
+                <h4>Profile Suggestion</h4>
                 <div class="row">
                     {% if suggestions %}
                     {% for suggestion in suggestions %}
                     <div class="col-md-4 mb-3">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">{{ suggestion.username }}</h5>
+                                <div class="profile-img mb-3">
+                                    {% if suggestion.picture %}
+                                    <a href="{{ suggestion.get_absolute_url }}">
+                                      <img class="rounded-circle img-fluid border" src="{{ suggestion.picture.url }}" alt="Pic" style="width: 120px; height: 120px; object-fit: cover;">
+                                    </a>
+                                    {% else %}
+                                    <img class="rounded-circle img-fluid border" src="{% static 'img/person.jpg' %}" style="width: 120px; height: 120px; object-fit: cover;">
+                                    {% endif %}
+                                  </div>
+                                <h5 class="card-title">{{ suggestion.first_name }}</h5>
+                                <h5 class="card-title">{{ suggestion.last_name }}</h5>
+                                <h5 class="card-title text-muted">@{{ suggestion.username }}</h5>
                                 <a href="{% url 'profile' suggestion.username %}" class="btn btn-primary btn-sm">View Profile</a>
                             </div>
                         </div>

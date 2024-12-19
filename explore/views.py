@@ -5,6 +5,7 @@ from post.models import Post
 from .models import Follow
 from django.db.models import Q
 from .models import Friend
+from authy.models import Profile
 
 
 @login_required
@@ -30,14 +31,21 @@ def explore_page(request):
 
 @login_required
 def profile_suggestions(request):
-    # Profile suggestions: excluding users the current user is following
+    # Profiles the current user is already following
     following_profiles = Follow.objects.filter(follower=request.user)
-    suggestions = User.objects.exclude(id__in=[f.following.id for f in following_profiles])
+    following_ids = [f.following.id for f in following_profiles]
+
+    # Exclude users the current user is following
+    suggestion = User.objects.exclude(id__in=following_ids)
+
+    # Fetch Profile data for suggestions
+    suggestions = Profile.objects.filter(user__in=suggestion)
 
     context = {
         'suggestions': suggestions
     }
     return render(request, 'explore/profile_suggestions.html', context)
+
 
 @login_required
 def search_posts(request):
