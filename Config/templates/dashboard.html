@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4 fs-4">Weekly Schedule</h1>
+    <table class="table table-bordered text-center">
+        <thead class="table-light fs-5">
+            <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Monday</th>
+                <th scope="col">Tuesday</th>
+                <th scope="col">Wednesday</th>
+                <th scope="col">Thursday</th>
+                <th scope="col">Friday</th>
+                <th scope="col">Saturday</th>
+            </tr>
+        </thead>
+        <tbody class="fs-5">
+            <tr>
+                <td>8:00 - 9:30</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>9:30 - 11:00</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>11:00 - 12:30</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>12:30 - 2:00</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2:00 - 3:30</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>3:30 - 5:00</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="container py-5">
+    <!-- Form Section -->
+    <form method="POST" enctype="multipart/form-data" class="mb-4 p-4 bg-white shadow-sm rounded">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label fs-5">Course Code</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Enter course name">
+        </div>
+        <div class="mb-3">
+            <label for="task" class="form-label fs-5">Task : Due Date</label>
+            <input type="text" id="task" name="task" class="form-control" placeholder="Enter task and due date">
+        </div>
+        <div class="mb-3">
+            <label for="title" class="form-label fs-5">Title</label>
+            <input type="text" id="title" name="title" class="form-control" placeholder="Enter title">
+        </div>
+        <div class="mb-3">
+            <label for="formFile" class="form-label fs-5">Drop your files here</label>
+            <input class="form-control" type="file" id="formFile" name="img">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Add</button>
+    </form>
+
+    <!-- Tasks Section -->
+    <h4 class="mb-3">Tasks</h4>
+    <table class="table table-bordered bg-white shadow-sm">
+        <thead class="table-light fs-6">
+            <tr>
+                <th>Course Name</th>
+                <th>Task : Due Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="fs-5">
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.name }}</td>
+                <td>{{ task.task }}</td>
+                <td>
+                    <a href="{% url 'edit_task' task.id %}" class="btn btn-sm btn-default">Edit</a>
+                    <form method="POST" action="{% url 'delete_task' task.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Cards Section -->
+    <h4 class="mb-3">Cards</h4>
+    <div class="row">
+        {% for card in cards %}
+        <div class="col-md-3 fs-6">
+            <div class="card mt-4" style="width: 18rem;">
+                <div class="card-header">
+                    {{ card.name }}
+                    <br>
+                    {{ card.task }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Title: {{ card.title }}</li>
+                </ul>
+                {% if card.img %}
+                <img src="{{ card.img.url }}" class="card-img-top" alt="{{ card.name }}" style="width: 100%; height: 200px; object-fit: cover;">
+                {% else %}
+                <img src="/media/def.png" class="card-img-top" alt="Default Image" style="width: 100%; height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-footer">
+                    <a href="{% url 'delete_task' card.id %}" class="btn m-3">Delete</a>
+                    <a href="{% url 'edit_task' card.id %}" class="btn btn-success m-3">Update</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info mt-4" role="alert">
+            No cards found.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+{% endblock %}

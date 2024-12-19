@@ -306,7 +306,7 @@ body {
     text-overflow: ellipsis;
   }
   
-  .card-text.text-truncate {
+.card-text.text-truncate {
     display: -webkit-box;
     -webkit-line-clamp: 3; /* Limits text to 3 lines */
     -webkit-box-orient: vertical;
