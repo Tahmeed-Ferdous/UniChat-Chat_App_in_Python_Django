@@ -58,10 +58,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="profile-img mb-3">
-                                    {% if suggestion.picture %}
-                                    <a href="{{ suggestion.get_absolute_url }}">
-                                      <img class="rounded-circle img-fluid border" src="{{ suggestion.picture.url }}" alt="Pic" style="width: 120px; height: 120px; object-fit: cover;">
-                                    </a>
+                                    {% if suggestion.profile.picture %}
+                                      <img class="rounded-circle img-fluid border" src="{{ suggestion.profile.picture.url }}" alt="Pic" style="width: 120px; height: 120px; object-fit: cover;">
                                     {% else %}
                                     <img class="rounded-circle img-fluid border" src="{% static 'img/person.jpg' %}" style="width: 120px; height: 120px; object-fit: cover;">
                                     {% endif %}
