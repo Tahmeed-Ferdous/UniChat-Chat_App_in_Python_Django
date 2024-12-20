@@ -15,7 +15,7 @@ from comment.forms import CommentForm
 @login_required
 def index(request):
 	user = request.user
-	posts = Stream.objects.filter(user=user)
+	posts = Stream.objects.raw("SELECT * FROM post_stream WHERE user_id = %s", [user.id])
 
 	group_ids = []
 
@@ -36,7 +36,7 @@ def index(request):
 def PostDetails(request, post_id):
 	post = get_object_or_404(Post, id=post_id)
 	user = request.user
-	profile = Profile.objects.get(user=user)
+	profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [user.id])
 	favorited = False
 
     #comment
@@ -55,8 +55,7 @@ def PostDetails(request, post_id):
 		form = CommentForm()
 	
 	if request.user.is_authenticated:
-		profile = Profile.objects.get(user=user)
-		#For the color of the favorite button
+		profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [user.id])
 		if profile.favorites.filter(id=post_id).exists():
 			favorited = True
 	template = loader.get_template('post_detail.html')
