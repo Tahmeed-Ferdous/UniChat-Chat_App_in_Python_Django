@@ -11,18 +11,14 @@ def dashboard(request):
     error_message = None
 
     if request.method == 'POST':
-        # Get data from the POST request
         name = request.POST.get('name')
         task = request.POST.get('task')
         title = request.POST.get('title')
         img = request.FILES.get('img')
-
-        # Handle to-do list form (name and task)
         if name and task and not title and not img:
             User.objects.create(name=name, task=task)
             return redirect('dashboard')
 
-        # Handle card creation form (name, title, task, and img)
         elif name and title and task and img:
             if User.objects.filter(name=name).exists():
                 error_message = "A user with this name already exists."
@@ -30,11 +26,8 @@ def dashboard(request):
                 User.objects.create(name=name, title=title, task=task, img=img)
                 return redirect('dashboard')
 
-    # Separate tasks and cards
-    tasks = User.objects.exclude(name='', task='')  # Tasks without title and image
-    cards = User.objects.exclude(title='', img='')  # Cards with title and image
-
-    # Sort tasks for display
+    tasks = User.objects.exclude(name='', task='') 
+    cards = User.objects.exclude(title='', img='') 
     def extract_last_two_digits(task_obj):
         try:
             return int(task_obj.task[-2:])
@@ -42,8 +35,6 @@ def dashboard(request):
             return float('inf')
 
     sorted_tasks = sorted(tasks, key=extract_last_two_digits)
-
-    # Render the dashboard page
     return render(request, 'dashboard.html', {
         'tasks': sorted_tasks,
         'cards': cards,
