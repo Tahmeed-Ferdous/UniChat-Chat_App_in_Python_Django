@@ -103,17 +103,28 @@ def NewPost(request):
 
 @login_required
 def tags(request, tag_slug):
-	tag = get_object_or_404(Tag, slug=tag_slug)
-	posts = Post.objects.filter(tags=tag).order_by('-posted')
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    tag_id = tag.id
 
-	template = loader.get_template('tags.html')
+    posts = Post.objects.raw(
+        """
+        SELECT post_post.* 
+        FROM post_post
+        INNER JOIN post_post_tags ON post_post.id = post_post_tags.post_id
+        WHERE post_post_tags.tag_id = %s
+        ORDER BY post_post.posted DESC
+        """,
+        [tag_id]
+    )
 
-	context = {
-		'posts':posts,
-		'tag':tag,
-	}
+    template = loader.get_template('tags.html')
+    context = {
+        'posts': posts,
+        'tag': tag,
+    }
 
-	return HttpResponse(template.render(context, request))
+    return HttpResponse(template.render(context, request))
+
 
 
 @login_required
