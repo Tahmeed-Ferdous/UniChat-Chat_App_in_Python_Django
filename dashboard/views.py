@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from dashboard.models import User
 from django.core.mail import send_mail
 from django.contrib import messages
+from django.conf import settings
+import random
 
 def dashboard(request):
     error_message = None
@@ -64,8 +66,11 @@ def edit_task(request, id):
         return redirect('dashboard')
     return render(request, 'edit.html', {'task': task})
 
+from django.shortcuts import render
+from django.core.mail import send_mail
+from django.contrib import messages
 
-def email_automation(request):
+def send_mail_req(request):
     templates = {
         'absent': "Dear {recipient_name},\n\nThis is to inform you about my absence from work.\n\nRegards,\n{sender_name}",
         'sick_leave': "Dear {recipient_name},\n\nI'm currently unwell and need sick leave.\n\nRegards,\n{sender_name}",
@@ -74,7 +79,7 @@ def email_automation(request):
 
     if request.method == 'POST':
         sender_email = request.POST.get('sender_email')
-        recipient_email = request.POST.get('recipient_email')
+        recipient_email = request.POST.get('recipient_email') # No longer a select
         template_type = request.POST.get('template_type')
 
         if sender_email and recipient_email and template_type in templates:
@@ -88,7 +93,7 @@ def email_automation(request):
                     email_subject,
                     email_body,
                     sender_email,
-                    [recipient_email],
+                    [recipient_email],  # Still a list for send_mail
                     fail_silently=False,
                 )
                 messages.success(request, "Email sent successfully!")
@@ -97,4 +102,4 @@ def email_automation(request):
         else:
             messages.error(request, "Invalid input. Please fill out the form correctly.")
 
-    return render(request, 'dashboard.html') 
+    return render(request, 'dashboard.html') # No need to pass recipients
