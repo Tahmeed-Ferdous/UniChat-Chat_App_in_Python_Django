@@ -1,5 +1,5 @@
 
-.card {
+.cardx {
  width: 258px;
  height: 254px;
  border-radius: 20px;
@@ -12,7 +12,7 @@
  z-index: 1;
 }
 
-.card-details {
+.card-detailsx {
  color: black;
  height: auto;
  gap: .5em;
@@ -20,7 +20,7 @@
  place-content: center;
 }
 
-.card-button {
+.card-buttonx {
  display: inline-block;
  width: auto;
  border-radius: 1rem;
@@ -34,26 +34,26 @@
  transition: background-color 0.3s ease-out;
 }
 
-.card-button:hover {
+.card-buttonx:hover {
  background-color: #005bb5;
 }
 
-.card:hover .card-button {
+.cardx:hover .card-buttonx {
  background-color: #005bb5;
 }
 
-.text-body {
+.text-bodyx {
  color: rgb(134, 134, 134);
 }
 
 /*Text*/
-.text-title {
+.text-titlex {
  font-size: 1.5em;
  font-weight: bold;
 }
 
 /*Hover*/
-.card:hover {
+.cardx:hover {
  border-color: #008bf8;
  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
 }
