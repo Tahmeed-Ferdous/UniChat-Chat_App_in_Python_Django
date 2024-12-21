@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-2">
     <div class="row">
         <!-- Main Content -->
         <div class="col-md-12">
             <!-- Following Profiles -->
             <section id="following-profiles">
-                <h4>Profiles You're Following</h4>
+
                 <div class="row">
                     {% if following_profiles %}
                     {% for profile in following_profiles %}
@@ -40,14 +40,15 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="profile-img mb-3">
-                                    {% if suggestion.profile.picture %}
-                                      <img class="rounded-circle img-fluid border" src="{{ suggestion.profile.picture.url }}" alt="Profile Image" style="width: 120px; height: 120px; object-fit: cover;">
+                                    {% if suggestion.picture %}
+                                      <img class="rounded-circle img-fluid border" src="{{ suggestion.picture.url }}" alt="Pic" style="width: 120px; height: 120px; object-fit: cover;">
                                     {% else %}
-                                    <img class="rounded-circle img-fluid border" src="{% static 'img/person.jpg' %}" alt="Default Profile Image" style="width: 120px; height: 120px; object-fit: cover;">
+                                    <img class="rounded-circle img-fluid border" src="{% static 'img/person.jpg' %}" alt="Pic" style="width: 120px; height: 120px; object-fit: cover;">
                                     {% endif %}
                                   </div>
                                 <h5 class="card-title">{{ suggestion.first_name }} {{ suggestion.last_name }}</h5>
-                                <h5 class="card-title text-muted">@{{ suggestion.username }}</h5>
+                                <h5 class="card-title text-muted">@{{ suggestion.user }}</h5>
+                                <h5 class="card-title text-muted">{{ suggestion.profile_info }}</h5>
                                 {% if suggestion.username %}
                                 <a href="{% url 'profile' suggestion.username %}" class="btn btn-primary btn-sm">View Profile</a>
                                 {% endif %}
