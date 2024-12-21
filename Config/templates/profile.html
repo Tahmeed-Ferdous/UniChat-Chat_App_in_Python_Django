@@ -2,28 +2,29 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
+
+<div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-lg-8 col-md-10">
-      <div class="car shadow-sm border-0 rounded-3">
+      <div class="card shadow-sm">
         <!-- Profile Header -->
-        <div class="card-header bg-light text-center py-5">
-          <div class="profile-img mb-4">
+        <div class="card-header bg-light text-center py-4">
+          <div class="profile-img mb-3">
             {% if profile.picture %}
             <a href="{{ profile.get_absolute_url }}">
-              <img class="rounded-circle border img-thumbnail" src="{{ profile.picture.url }}" alt="Profile Picture" style="width: 120px; height: 120px; object-fit: cover;">
+              <img class="rounded-circle img-fluid border" src="{{ profile.picture.url }}" alt="Profile Picture" style="width: 120px; height: 120px; object-fit: cover;">
             </a>
             {% else %}
-            <img class="rounded-circle border img-thumbnail" src="{% static 'img/person.jpg' %}" alt="Default Profile Picture" style="width: 120px; height: 120px; object-fit: cover;">
+            <img class="rounded-circle img-fluid border" src="{% static 'img/person.jpg' %}" alt="Default Profile Picture" style="width: 120px; height: 120px; object-fit: cover;">
             {% endif %}
           </div>
-          <h4 class="fw-bold mb-2">
+          <h4 class="fw-bold">
             {% if profile.first_name %}{{ profile.first_name }} {{ profile.last_name }}{% endif %}
           </h4>
           <p class="text-muted fs-6">@{{ profile.user }}</p>
 
           {% if user.is_authenticated and user != profile.user %}
-          <div class="mt-3">
+          <div>
             {% if follow_status == True %}
             <a href="{% url 'follow' profile.user 0 %}" class="btn btn-sm btn-outline-danger">Unfollow</a>
             {% else %}
@@ -34,7 +35,7 @@
         </div>
 
         <!-- Profile Stats -->
-        <div class="card-bod py-4 text-center">
+        <div class="card-body py-4 text-center">
           <div class="row">
             <div class="col">
               <h6 class="text-muted">Posts</h6>
@@ -60,133 +61,55 @@
           {% endif %}
           <div class="text-start fs-6">
             {% if profile.location %}
-            <p class="mb-2"><i class="bi bi-geo-alt-fill text-primary me-2"></i><strong>Location:</strong> {{ profile.location }}</p>
+            <p class="mb-2"><i class="bi bi-geo-alt-fill text-primary"></i> <span class="fw-bold">Location:</span> {{ profile.location }}</p>
             {% endif %}
             {% if profile.url %}
-            <p class="mb-2"><i class="bi bi-link-45deg text-primary me-2"></i><strong>Website:</strong> <a href="{{ profile.url }}" target="_blank">{{ profile.url }}</a></p>
+            <p class="mb-2"><i class="bi bi-link-45deg text-primary"></i> <span class="fw-bold">Website:</span> <a href="{{ profile.url }}" target="_blank">{{ profile.url }}</a></p>
             {% endif %}
             {% if profile.profile_info %}
-            <p class="mb-2"><i class="bi bi-person-lines-fill text-primary me-2"></i><strong>Bio:</strong> {{ profile.profile_info }}</p>
+            <p class="mb-2"><i class="bi bi-person-lines-fill text-primary"></i> <span class="fw-bold">Bio:</span> {{ profile.profile_info }}</p>
             {% endif %}
           </div>
         </div>
 
         <!-- Tabs -->
         <ul class="nav nav-tabs justify-content-center mt-4">
-          <li class="nav-ite">
+          <li class="nav-item">
             <a class="nav-link {% if url_name == 'profile' %}active{% endif %}" href="{% url 'profile' profile.user %}">Posts</a>
           </li>
-          <li class="nav-ite">
+          <li class="nav-item">
             <a class="nav-link {% if url_name == 'profilefavorites' %}active{% endif %}" href="{% url 'profilefavorites' profile.user %}">Saved</a>
           </li>
         </ul>
       </div>
 
       <!-- Posts Section -->
-      <h4 class="mt-5 mb-3">Posts</h4>
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+      <div class="row mt-4 g-4">
         {% for post in posts %}
-        <div class="col">
-          <div class="card-container">
-            <div class="card border-0 shadow-sm">
-              <div class="img-content" style="background-image: url('{% if post.picture %}{{ post.picture.url }}{% else %}{% static 'media/def.png' %}{% endif %}'); background-size: cover; background-position: center;">
-              </div>
-              <div class="content">
-                <p class="heading fs-6">{{ post.title }}</p>
-                <p class="text-truncate fs-6">{{ post.caption }}</p>
-                <a href="{{ post.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Read more</a>
-              </div>
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-img-top">
+              {% if post.picture %}
+              <a href="{{ post.get_absolute_url }}">
+                <img class="img-fluid" src="{{ post.picture.url }}" alt="Post Image" style="object-fit: cover; height: 200px;">
+              </a>
+              {% else %}
+              <img class="img-fluid" src="{% static 'media/def.png' %}" alt="Default Post Image" style="object-fit: cover; height: 200px;">
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="{{ post.get_absolute_url }}" class="text-decoration-none">{{ post.title }}</a>
+              </h5>
+              <p class="card-text text-truncate">{{ post.content|truncatechars:100|safe }}</p>
+            </div>
+            <div class="card-footer text-end">
+              <a href="{{ post.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Read more</a>
             </div>
           </div>
         </div>
         {% endfor %}
       </div>
-
-      <style>
-      .card-container {
-          width: 100%;
-          height: 200px;
-          position: relative;
-          border-radius: 10px;
-          margin: auto;
-      }
-
-      .card-container::before {
-          content: "";
-          z-index: -1;
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100% );
-          transform: translate3d(0, 0, 0) scale(0.95);
-          filter: blur(20px);
-      }
-
-      .card {
-          width: 100%;
-          height: 100%;
-          border-radius: inherit;
-          overflow: hidden;
-          position: relative;
-      }
-
-      .card .img-content {
-          width: 100%;
-          height: 200px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100% );
-          transition: scale 0.6s, rotate 0.6s, filter 1s;
-      }
-
-      .card .img-content svg {
-          width: 50px;
-          height: 50px;
-          fill: #e8e8e8;
-          transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-      }
-
-      .card .content {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          gap: 10px;
-          color: #e8e8e8;
-          padding: 20px;
-          line-height: 1.5;
-          border-radius: 5px;
-          background: rgba(0, 0, 0, 0.6);
-          opacity: 0;
-          pointer-events: none;
-          transform: translateY(50px);
-          transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-      }
-
-      .card .content .heading {
-          font-size: 20px;
-          font-weight: 700;
-      }
-
-      .card:hover .content {
-          opacity: 1;
-          transform: translateY(0);
-      }
-
-      .card:hover .img-content {
-          scale: 1.1;
-          filter: blur(3px);
-      }
-
-      .card:hover .img-content svg {
-          fill: transparent;
-      }
-      </style>
     </div>
   </div>
 </div>
