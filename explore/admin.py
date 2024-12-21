@@ -1,6 +1,3 @@
 from django.contrib import admin
-from .models import ProfileSuggestion, Notification, Friend
 
-admin.site.register(ProfileSuggestion)
-admin.site.register(Notification)
-admin.site.register(Friend)
+# Since Follow model is already registered in the post app, we don't need to register it here
