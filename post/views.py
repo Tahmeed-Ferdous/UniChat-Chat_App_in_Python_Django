@@ -55,7 +55,7 @@ def PostDetails(request, post_id):
 		form = CommentForm()
 	
 	if request.user.is_authenticated:
-		profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [user.id])
+		profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [user.id])[0]
 		if profile.favorites.filter(id=post_id).exists():
 			favorited = True
 	template = loader.get_template('post_detail.html')
@@ -151,7 +151,7 @@ def like(request, post_id):
 @login_required
 def favorite(request, post_id):
     post = Post.objects.get(id=post_id)
-    profile = Profile.objects.get(user=request.user)
+    profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [request.user.id])[0]
 
     if profile.favorites.filter(id=post_id).exists():
         profile.favorites.remove(post)
