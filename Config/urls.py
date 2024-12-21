@@ -13,12 +13,8 @@ urlpatterns = [
     path('direct/', include('direct.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('notifications/', include('notifications.urls')),
+    path('settings/', include('setting.urls', namespace='setting')),  # Move this above
     path('<username>/', UserProfile, name='profile'),
     path('<username>/saved', UserProfile, name='profilefavorites'),
     path('<username>/follow/<option>', follow, name='follow'),
-
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-
