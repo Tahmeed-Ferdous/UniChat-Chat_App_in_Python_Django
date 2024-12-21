@@ -1,15 +1,18 @@
-{% extends 'base.html' %}
 
+{% extends 'base.html' %}
+{% load custom_filters %}
 {% load static %}
 
 {% block content %}
 
-<div class="container mt-5">
+<!-- <div class="container mt-5">
     <h1 class="text-center mb-4 fs-4">Weekly Schedule</h1>
     <table class="table table-bordered text-center">
         <thead class="table-light fs-5">
             <tr>
+                
                 <th scope="col">Time</th>
+                <th scope="col">Sunday</th>
                 <th scope="col">Monday</th>
                 <th scope="col">Tuesday</th>
                 <th scope="col">Wednesday</th>
@@ -20,7 +23,7 @@
         </thead>
         <tbody class="fs-5">
             <tr>
-                <td>8:00 - 9:30</td>
+                <td>8:00 - 9:20</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -29,7 +32,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td>9:30 - 11:00</td>
+                <td>9:30 - 10:50</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -38,7 +41,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td>11:00 - 12:30</td>
+                <td>11:00 - 12:20</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -47,7 +50,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td>12:30 - 2:00</td>
+                <td>12:30 - 1:50</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -56,7 +59,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td>2:00 - 3:30</td>
+                <td>2:00 - 3:20</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -65,7 +68,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td>3:30 - 5:00</td>
+                <td>3:30 - 4:50</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -75,11 +78,73 @@
             </tr>
         </tbody>
     </table>
+</div> -->
+<div class="container mt-4">
+    <a href="{% url 'display_schedule' %}" class="btn btn-primary">
+        Go to Weekly Schedule
+    </a>
+</div>
+<div class="container mt-5">
+    
+    <!-- <h1 class="text-center mb-4 fs-4">Weekly Schedule</h1> -->
+    <table class="table table-bordered text-center">
+        <thead class="table-light fs-5">
+            <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Sunday</th>
+                <th scope="col">Monday</th>
+                <th scope="col">Tuesday</th>
+                <th scope="col">Wednesday</th>
+                <th scope="col">Thursday</th>
+                <th scope="col">Friday</th>
+                <th scope="col">Saturday</th>
+            </tr>
+        </thead>
+        <!-- LAB FEATURE NOT ADDED -->
+        <tbody class="fs-5">
+            {% for start, end in time_slots %}
+            <tr>
+                <td>{{ start }} - {{ end }}</td>
+                {% for day in timetable_data.keys %}
+                    <td>
+                        {% if timetable_data|dict_key:day|dict_key:start %}
+                            {% for course in timetable_data|dict_key:day|dict_key:start %}
+                                <div>{{ course }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <div>-</div>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 
 
+
 <div class="container py-5">
+    <!-- Routine Planner -->
+    <form method="POST" enctype="multipart/form-data" class="mb-4 p-4 bg-white shadow-sm rounded" action="{% url 'add_course' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label fs-5">Course</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Enter course name">
+        </div>
+        <div class="mb-3">
+            <label for="task" class="form-label fs-5">Class starting time</label>
+            <input type="text" id="start_time" name="start_time" class="form-control" placeholder="Enter the starting time">
+        </div>
+        <div class="mb-3">
+            <label for="title" class="form-label fs-5">Class Days</label>
+            <input type="text" id="days" name="days" class="form-control" placeholder="Days of the week when classes will take place">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Add</button>
+    </form>
+    
+    
     <!-- Form Section -->
     <form method="POST" enctype="multipart/form-data" class="mb-4 p-4 bg-white shadow-sm rounded">
         {% csrf_token %}

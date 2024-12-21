@@ -15,6 +15,8 @@ def dashboard(request):
         task = request.POST.get('task')
         title = request.POST.get('title')
         img = request.FILES.get('img')
+        # start_time, days
+        
         if name and task and not title and not img:
             User.objects.create(name=name, task=task)
             return redirect('dashboard')
@@ -28,6 +30,7 @@ def dashboard(request):
 
     tasks = User.objects.exclude(name='', task='') 
     cards = User.objects.exclude(title='', img='') 
+
     def extract_last_two_digits(task_obj):
         try:
             return int(task_obj.task[-2:])
@@ -40,6 +43,60 @@ def dashboard(request):
         'cards': cards,
         'error': error_message
     })
+# routine planner views function to update the time table
+def add_course(request):
+    error_message=None
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        start_time=request.POST.get('start_time')
+        days=request.POST.get('days')
+        if name and start_time and days:
+            User.objects.create(name=name, start_time=start_time, days=days)
+            
+            return redirect('dashboard')
+# function to display added courses
+from datetime import datetime
+
+def displayOnSchedule(request):
+    courses = User.objects.all().exclude(start_time__isnull=True).exclude(days__isnull=True)
+    timetable_data = {
+        'Sunday': {},
+        'Monday': {},
+        'Tuesday': {},
+        'Wednesday': {},
+        'Thursday': {},
+        'Friday': {},
+        'Saturday': {}
+    }
+
+    for course in courses:
+        days = course.days.split(',')
+        for day in days:
+            day = day.strip()
+            if day in timetable_data:
+                time_slot = course.start_time.strftime('%H:%M')
+                if time_slot not in timetable_data[day]:
+                    timetable_data[day][time_slot] = []
+                timetable_data[day][time_slot].append(course.name)
+    
+    # Define proper time intervals
+    time_slots = [
+        ("08:00", "09:20"),
+        ("09:30", "10:50"),
+        ("11:00", "12:20"),
+        ("12:30", "1:50"),
+        ("2:00", "3:20"),
+        ("3:30", "4:50"),
+    ]
+    
+
+    return render(request, 'dashboard.html', {
+        'timetable_data': timetable_data,
+        'time_slots': time_slots
+    })
+
+
+
 
 
 
