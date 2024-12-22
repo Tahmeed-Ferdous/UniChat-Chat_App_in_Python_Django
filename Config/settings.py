@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'direct',
     'notifications',
     'dashboard',
+    'explore',
+    'setting'
 ]
 
 MIDDLEWARE = [

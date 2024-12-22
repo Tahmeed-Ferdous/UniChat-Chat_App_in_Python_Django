@@ -27,14 +27,14 @@
           </div>
         </div>
         <div class="toggle">
-          <i class='bx bxs-chevron-right ' ></i>
+          <i class='bx bxs-chevron-right'></i>
         </div>
       </header>
       <div class="menu-bar">
         <div class="menu">
           <li class="search-box">
             <a href="{% url 'usersearch' %}">
-              <i class='bx bx-search-alt-2 icon' ></i>
+              <i class='bx bx-search-alt-2 icon'></i>
               <input type="text" placeholder="Search...">
             </a>
           </li>
@@ -47,7 +47,7 @@
             </li>
             <li class="nav-link">
               <a href="{% url 'show-notifications' %}">
-                <i class='bx bx-bell icon' ></i>
+                <i class='bx bx-bell icon'></i>
                 <span class="text nav-text">Reminders</span>
                 {% if count_notifications %}
                   <span class="badge">{{ count_notifications }}</span>
@@ -55,17 +55,17 @@
               </a>
             </li>
             <li class="nav-link">
-              <a href="#">
-                <i class='bx bx-objects-horizontal-left icon' ></i>
+              <a href="{% url 'explore:explore_page' %}">
+                <i class='bx bx-objects-horizontal-left icon'></i>
                 <span class="text nav-text">Explore</span>
               </a>
             </li>
             <li class="nav-link">
               <a href="{% url 'directs' request.user %}">
-                <i class='bx bx-chat icon' ></i>
+                <i class='bx bx-chat icon'></i>
                 <span class="text nav-text">Messages</span>
                 {% if directs_counts %}
-                <span class="text nav-text">{{ directs_count }}</span>
+                  <span class="text nav-text">{{ directs_count }}</span>
                 {% endif %}
               </a>
             </li>
@@ -84,22 +84,22 @@
           </ul>
         </div>
         <div class="bottom-content">
-          <li class="">
-            <a href="#">
-              <i class='bx bxs-cog icon' ></i>
+          <li class="nav-link">
+            <a href="{% url 'setting:settings_page' %}">
+              <i class='bx bxs-cog icon'></i>
               <span class="text nav-text">Settings</span>
             </a>
           </li>
           <li class="nav-link">
             <a href="{% url 'logout' %}">
-              <i class='bx bx-log-out icon' ></i>
+              <i class='bx bx-log-out icon'></i>
               <span class="text nav-text">Logout</span>
             </a>
           </li>
           <li class="mode">
             <div class="moon-sun">
-              <i class='bx bxs-moon icon' ></i>
-              <i class='bx bxs-sun icon' ></i>
+              <i class='bx bxs-moon icon'></i>
+              <i class='bx bxs-sun icon'></i>
             </div>
             <span class="mode-text text">Dark Mode</span>
 
@@ -123,14 +123,11 @@
 
             {% block pagination %}
             {% endblock %}
-
           </div>
-
       </section>
     </main>
-  
 
     <script src="{% static 'js/script.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5pN6jIeHz" crossorigin="anonymous"></script>
   </body>
 </html>
