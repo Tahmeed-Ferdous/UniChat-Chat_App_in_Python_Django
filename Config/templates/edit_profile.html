@@ -4,7 +4,7 @@
         
 {% block content %}
 
-<div class="columns is-mobile">
+<div class="columns fs-6">
   <div class="column is-half is-offset-one-quarter">
 
     <div class="card fs-6">
@@ -12,45 +12,45 @@
 
     <form method="post" enctype="multipart/form-data" action="{% url 'edit-profile' %}" role="form">
       {% csrf_token %}
-    <h3 class="title is-3">Edit Profile</h3>
+    <h3 class="title is-3 fs-4 text-center">Edit Profile</h3>
 
           <div class="field">
-              <label class="label is-medium">Choose your picture</label>
+              <label class="label is-medium fs-5">Choose your picture</label>
               <div class="file is-boxed">
                 {{ form.picture }}
               </div>
           </div>
 
           <div class="field">
-              <label class="label is-medium">First name</label>
+              <label class="label is-medium fs-5">First name</label>
               <div class="control">
                 {{ form.first_name }}
               </div>
           </div>
 
           <div class="field">
-              <label class="label is-medium">Last name</label>
+              <label class="label is-medium fs-5">Last name</label>
               <div class="control">
                 {{ form.last_name }}
               </div>
           </div>
 
           <div class="field">
-              <label class="label is-medium">Location</label>
+              <label class="label is-medium fs-5">Location</label>
               <div class="control">
                 {{ form.location }}
               </div>
           </div>
 
           <div class="field">
-              <label class="label is-medium">url</label>
+              <label class="label is-medium fs-5">url</label>
               <div class="control">
                 {{ form.url }}
               </div>
           </div>
 
           <div class="field">
-              <label class="label is-medium">BIO</label>
+              <label class="label is-medium fs-5">BIO</label>
               <div class="control">
                 {{ form.profile_info }}
               </div>
