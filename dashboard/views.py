@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
 from django.http import HttpResponse
-from dashboard.models import User
+from dashboard.models import Tasks
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.conf import settings
@@ -18,18 +18,18 @@ def dashboard(request):
         # start_time, days
         
         if name and task and not title and not img:
-            User.objects.create(name=name, task=task)
+            Tasks.objects.create(name=name, task=task)
             return redirect('dashboard')
 
         elif name and title and task and img:
-            if User.objects.filter(name=name).exists():
+            if Tasks.objects.filter(name=name).exists():
                 error_message = "A user with this name already exists."
             else:
-                User.objects.create(name=name, title=title, task=task, img=img)
+                Tasks.objects.create(name=name, title=title, task=task, img=img)
                 return redirect('dashboard')
 
-    tasks = User.objects.exclude(name='', task='') 
-    cards = User.objects.exclude(title='', img='') 
+    tasks = Tasks.objects.exclude(name='', task='') 
+    cards = Tasks.objects.exclude(title='', img='') 
 
     def extract_last_two_digits(task_obj):
         try:
@@ -51,14 +51,14 @@ def add_course(request):
         start_time=request.POST.get('start_time')
         days=request.POST.get('days')
         if name and start_time and days:
-            User.objects.create(name=name, start_time=start_time, days=days)
+            Tasks.objects.create(name=name, start_time=start_time, days=days)
             
             return redirect('dashboard')
 # function to display added courses
 from datetime import datetime
 
 def displayOnSchedule(request):
-    courses = User.objects.all().exclude(start_time__isnull=True).exclude(days__isnull=True)
+    courses = Tasks.objects.all().exclude(start_time__isnull=True).exclude(days__isnull=True)
     timetable_data = {
         'Sunday': {},
         'Monday': {},
@@ -101,12 +101,12 @@ def displayOnSchedule(request):
 
 
 def delete_task(request, task_id):
-    task = User.objects.get(id=task_id)
+    task = Tasks.objects.get(id=task_id)
     task.delete()
     return redirect('dashboard')
 
 def edit_task(request, id):
-    task = get_object_or_404(User, id=id)
+    task = get_object_or_404(Tasks, id=id)
     if request.method == 'POST':
         task.name = request.POST.get('name')
         task.task = request.POST.get('task')

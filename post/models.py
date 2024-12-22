@@ -82,7 +82,7 @@ class Stream(models.Model):
             stream.save()
 
     def __str__(self):
-        return f"{self.user.username} streams {self.post.title}"
+        return f"{self.user.username} streams {self.post.id}"
 
 class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_likes')

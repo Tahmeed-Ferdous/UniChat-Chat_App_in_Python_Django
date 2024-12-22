@@ -4,52 +4,55 @@
 
 {% block content %}
 
- <div class="columns is-mobile">
-  <div class="column is-offset-one-fifth">
-
-
-<div class="field has-addons">
-<form>
-  <div class="control">
-    <input class="input is-large" name="q" type="text" placeholder="Search users..." value="{{ request.GET.q }}">
-  </div>
-  <div class="control">
-  	<button type="submit" class="button is-success">Search</button>
-  </div>
-  </form>
-</div>
-
-
-</div>
-</div>
-
-<div class="column is-one-quarter">
-
-{% for user in users %}
-<div class="box">
-  <article class="media">
-    <div class="media-left">
-      <figure class="image is-64x64">
-          {% if user.profile.picture %}
-            <img src="{{ user.profile.picture.url }}" alt="Placeholder image">
-          {% else %}
-            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-          {% endif %}
-      </figure>
+<!-- Search Section -->
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <form method="GET" class="input-group">
+        <input 
+          type="text" 
+          name="q" 
+          class="form-control" 
+          placeholder="Search users..." 
+          value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
     </div>
-    <div class="media-content">
-      <div class="content">
-        <p>
-          <strong>{{ user.profile.first_name }} {{ user.profile.last_name }}</strong><small>@{{ user.username }}</small>
-        </p>
-        <a href="{% url 'newconversation' user.username %}" class="button is-info">Send a message!</a>
+  </div>
+</div>
+
+<!-- Users Section -->
+<div class="container">
+  <div class="row gy-4 gx-2">
+    {% for user in users %}
+    <div class="col-md-4 col-lg-3">
+      <div class="card shadow-sm">
+        {% if user.profile.picture %}
+        <img 
+          src="{{ user.profile.picture.url }}" 
+          class="card-img-top" 
+          alt="{{ user.profile.first_name }}">
+        {% else %}
+        <img 
+          src="https://via.placeholder.com/300x200" 
+          class="card-img-top" 
+          alt="Placeholder image">
+        {% endif %}
+        <div class="card-body text-center fs-5">
+          <h5 class="card-title">{{ user.profile.first_name }} {{ user.profile.last_name }}</h5>
+          <p class="card-text text-muted">@{{ user.username }}</p>
+          <a 
+            href="{% url 'newconversation' user.username %}" 
+            class="btn btn-outline-success btn-sm">Send a Message</a>
+            <a 
+            href="{% url 'profile' user.username %}" 
+            class="btn btn-primary btn-sm">View Profile</a>
+        </div>
       </div>
     </div>
-  </article>
-</div>
-{% endfor %}
-	
-
+    {% endfor %}
+  </div>
 </div>
 
 {% endblock %}
+
