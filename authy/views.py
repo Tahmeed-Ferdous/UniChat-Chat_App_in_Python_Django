@@ -69,6 +69,7 @@ def UserProfile(request, username):
 
 	return HttpResponse(template.render(context, request))
 
+@login_required
 def custom_logout_view(request):
     logout(request)
     return redirect('login')

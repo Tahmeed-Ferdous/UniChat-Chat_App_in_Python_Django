@@ -4,6 +4,7 @@ from django.template import loader
 
 from post.models import Stream, Post, Tag, Likes
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from post.forms import NewPostForm
 from authy.models import Profile
 from django.urls import reverse
@@ -13,6 +14,7 @@ from comment.models import Comment
 from comment.forms import CommentForm
 
 @login_required
+@never_cache
 def index(request):
 	user = request.user
 	posts = Stream.objects.filter(user=user)
