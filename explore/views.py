@@ -5,17 +5,21 @@ from post.models import Post
 from .models import Follow
 from authy.models import Profile
 
+from django.db.models import Q
+
 @login_required
 def explore(request):
     user = request.user
 
-    # Get users the logged-in user is following
     following_profiles = Follow.objects.filter(follower=user)
-    followed_users = [friend.following for friend in following_profiles]  # Followed users are in `friend.following`
+    followed_users = [friend.following for friend in following_profiles] 
 
-    # Profile suggestions: excluding users the current user is following
-    followed_user_ids = [user.id for user in followed_users]  # Extract the IDs of followed users
-    profile_suggestions = Profile.objects.exclude(user__in=followed_user_ids).exclude(user=user)
+    followed_user_ids = [user.id for user in followed_users]
+    profile_suggestions = Profile.objects.filter(
+        ~Q(user__in=followed_user_ids),
+        ~Q(user=user),
+        user__is_superuser=False
+    )
 
     context = {
         'following_profiles': followed_users,
@@ -23,3 +27,4 @@ def explore(request):
     }
     
     return render(request, 'explore/explore.html', context)
+

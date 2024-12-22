@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-<div class="columns is-variable is-8">
+<div class="columns is-variable is-8 fs-5">
   <!-- Sidebar for Messages -->
   <div class="column is-one-quarter">
     <aside class="menu">
@@ -38,7 +38,7 @@
         </li>
         {% endfor %}
       </ul>
-      <a href="{% url 'usersearch' %}" class="button is-success is-fullwidth" style="margin-top: 10px;">New Message</a>
+      <a href="{% url 'usersearch' %}" class="button is-success is-fullwidth" style="text-decoration: none;">New Message</a>
     </aside>
   </div>
 
@@ -50,7 +50,7 @@
     >
       {% if directs %}
         {% for direct in directs %}
-        <div class="media" style="margin-bottom: 15px;">
+        <div class="media" style="margin-bottom: 10px;">
           <figure class="media-left">
             <p class="image is-48x48">
               {% if direct.sender.profile.picture %}
@@ -61,12 +61,12 @@
             </p>
           </figure>
           <div class="media-content">
-            <p>
+            <p class="fs-6">
               <strong>{{ direct.sender.profile.first_name }} {{ direct.sender.profile.last_name }}</strong> 
               <small style="color: gray;">@{{ direct.sender.username }}</small>
               <span style="float: right; font-size: 12px; color: gray;">{{ direct.date|date:'M d, H:i' }}</span>
             </p>
-            <p style="margin-top: 5px;">{{ direct.body }}</p>
+            <p class="fs-6">{{ direct.body }}</p>
           </div>
         </div>
         {% endfor %}
