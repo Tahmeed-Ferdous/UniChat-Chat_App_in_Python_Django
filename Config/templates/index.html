@@ -2,7 +2,34 @@
 {% load static %}
 
 {% block content %}
-<h4 class="text-center mb-3 mt-2">Welcome, {% if request.user.first_name %}{{ request.user.first_name }}{% else %}Unknown{% endif %}</h4>
+    <div class="row align-items-center">
+      <!-- Welcome Message in the Center -->
+      <div class="col text-center">
+        <h4 class="mb-3 mt-3">Welcome, 
+          {% if request.user.profile.first_name %}
+            {{ request.user.profile.first_name }}
+          {% else %}
+            Unknown
+          {% endif %}
+        </h4>
+      </div>
+      <div class="col-auto">
+        {% if user.profile.picture %}
+        <a href="{{ user.profile.get_absolute_url }}">
+          <img class="rounded-circle img-fluid border" 
+               src="{{ user.profile.picture.url }}" 
+               alt="Profile Picture" 
+               style="width: 60px; height: 60px; object-fit: cover;">
+        </a>
+        {% else %}
+        <img class="rounded-circle img-fluid border" 
+             src="{% static 'img/person.jpg' %}" 
+             alt="Pic" 
+             style="width: 60px; height: 60px; object-fit: cover;">
+        {% endif %}
+      </div>
+    </div>
+  
 <hr class="mb-4">
 
 <div class="container-fluid py-3">
