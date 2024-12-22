@@ -14,7 +14,7 @@
                     {% for profile in following_profiles %}
                     <div class="col-md-4 mb-3">
                         <div class="card">
-                            <img src="{{ profile.user.profile_image.url }}" class="card-img-top" alt="Profile Image">
+                            <img src="{{ profile.user.profile.image.url }}" class="card-img-top" alt="Profile Image">
                             <div class="card-body">
                                 <h5 class="card-title">{{ profile.user.username }}</h5>
                                 {% if profile.user.username %}
@@ -47,8 +47,8 @@
                                     {% endif %}
                                   </div>
                                 <h5 class="card-title">{{ suggestion.first_name }} {{ suggestion.last_name }}</h5>
-                                <h5 class="card-title text-muted">@{{ suggestion.user }}</h5>
-                                <h5 class="card-title text-muted">{{ suggestion.profile_info }}</h5>
+                                <h5 class="card-title text-muted fs-6">@{{ suggestion.user }}</h5>
+                                <h5 class="card-title text-muted fs-6">{{ suggestion.profile_info }}</h5>
                                 {% if suggestion.user %}
                                 <a href="{% url 'profile' suggestion.user %}" class="btn btn-primary btn-sm">View Profile</a>
                                 {% endif %}

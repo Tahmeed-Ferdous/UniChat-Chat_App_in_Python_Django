@@ -58,6 +58,7 @@
                     <!-- User Section -->
                     <div class="d-flex align-items-center mb-3">
                         <!-- User Picture -->
+                        <a href="{% url 'profile' post_item.user %}">
                         {% if post_item.user.profile.picture %}
                         <img src="{{ post_item.user.profile.picture.url }}" 
                              alt="User Profile" 
@@ -69,29 +70,30 @@
                              class="rounded-circle me-2" 
                              style="width: 48px; height: 48px;">
                         {% endif %}
+                        </a>
                         <!-- User Info -->
                         <div class="flex-grow-1">
                             <a href="{% url 'profile' post_item.user %}" class="text-decoration-none">
                                 <h6 class="mb-0 text-truncate fw-bold">
-                                    {% if post_item.user.first_name %}
-                                    {{ post_item.user.first_name }} {{ post_item.user.last_name }}
+                                    {% if post_item.user.profile.first_name %}
+                                    {{ post_item.user.profile.first_name }} {{ post_item.profile.user.last_name }}
                                     {% else %}
                                     BRAC University
                                     {% endif %}
                                 </h6>
                             </a>
-                            <p class="text-muted small mb-0 fs-5">@{{ post_item.user.username }}</p>
+                            <p class="text-muted small mb-0 fs-6">@{{ post_item.user.username }}</p>
                         </div>
                     </div>
 
                     <!-- Post Caption -->
-                    <p class="card-text text-muted text-truncate mb-3 small fs-5" 
+                    <p class="card-text text-muted text-truncate mb-3 small fs-6" 
                        style="max-height: 4.5em; overflow: hidden; line-height: 1.5em;">
                         {{ post_item.caption }}
                     </p>
 
                     <!-- Tags -->
-                    <div class="fs-5">
+                    <div class="fs-6">
                         {% for tag in post_item.tags.all %}
                         <a href="{{ tag.get_absolute_url }}" class="badge bg-primary text-decoration-none me-1">#{{ tag }}</a>
                         {% endfor %}
