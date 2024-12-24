@@ -238,36 +238,31 @@
     </table>
 
     <!-- Cards Section -->
-    <h4 class="mb-1">Cards</h4>
-    <div class="row">
-        {% for card in cards %}
-        <div class="col-md-3 fs-6">
-            <div class="card mt-4" style="width: 18rem;">
-                <div class="card-header">
-                    {{ card.name }}
-                    <br>
-                    {{ card.task }}
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Title: {{ card.title }}</li>
-                </ul>
-                {% if card.img %}
-                <img src="{{ card.img.url }}" class="card-img-top" alt="{{ card.name }}" style="width: 100%; height: 200px; object-fit: cover;">
-                {% else %}
-                <img src="/media/def.png" class="card-img-top" alt="Default Image" style="width: 100%; height: 200px; object-fit: cover;">
-                {% endif %}
-                <div class="card-footer">
-                    <a href="{% url 'delete_task' card.id %}" class="btn m-3">Delete</a>
-                    <a href="{% url 'edit_task' card.id %}" class="btn btn-success m-3">Update</a>
-                </div>
+    <h4 class="mb-3">Cards</h4>
+<div class="row">
+    {% for card in cards %}
+    <div class="col-md-3 fs-6">
+        <div class="cardx mt-4" style="background-image: url('{% if card.img %}{{ card.img.url }}{% else %}/media/def.png{% endif %}'); background-size: cover; background-position: center; position: relative;">
+            <div class="card-detailsx" style="background: rgba(255, 255, 255, 0.8); border-radius: 15px; padding: 1rem; position: relative; z-index: 2;">
+                <p class="text-titlex">{{ card.name }}</p>
+                <p class="text-bodyx">{{ card.task }}</p>
+                <p class="text-bodyx">Title: {{ card.title }}</p>
             </div>
         </div>
-        {% empty %}
-        <div class="alert-info mt-4 fs-6" role="alert">
-            No cards found.
+        <div style="text-align: center; margin-top: -30px; position: relative; z-index: 5;">
+            <a href="{% url 'edit_task' card.id %}" class="card-buttonx text-light" style="display: block; margin: 5px; text-decoration: none;">Update</a>
+            <a href="{% url 'delete_task' card.id %}" class="card-buttonx text-light" style="display: block; margin: 5px; text-decoration: none;">Delete</a>
         </div>
-        {% endfor %}
     </div>
+    {% empty %}
+    <div class="alert alert-info mt-4" role="alert">
+        No cards found.
+    </div>
+    {% endfor %}
+</div>
+
+
+
 </div>
 
 
