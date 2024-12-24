@@ -242,16 +242,16 @@
 <div class="row">
     {% for card in cards %}
     <div class="col-md-3 fs-6">
-        <div class="cardx mt-4" style="background-image: url('{% if card.img %}{{ card.img.url }}{% else %}/media/def.png{% endif %}'); background-size: cover; background-position: center; position: relative;">
-            <div class="card-detailsx" style="background: rgba(255, 255, 255, 0.8); border-radius: 15px; padding: 1rem; position: relative; z-index: 2;">
+        <div class="card mt-4" style="background-image: url('{% if card.img %}{{ card.img.url }}{% else %}/media/def.png{% endif %}'); background-size: cover; background-position: center; position: relative;">
+            <div class="card-detailsx" style="background: rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 1rem; position: relative; z-index: 2;">
                 <p class="text-titlex">{{ card.name }}</p>
                 <p class="text-bodyx">{{ card.task }}</p>
                 <p class="text-bodyx">Title: {{ card.title }}</p>
             </div>
         </div>
         <div style="text-align: center; margin-top: -30px; position: relative; z-index: 5;">
-            <a href="{% url 'edit_task' card.id %}" class="card-buttonx text-light" style="display: block; margin: 5px; text-decoration: none;">Update</a>
-            <a href="{% url 'delete_task' card.id %}" class="card-buttonx text-light" style="display: block; margin: 5px; text-decoration: none;">Delete</a>
+            <a href="{% url 'edit_task' card.id %}" class="btn btn-primary text-light" style="display: block; margin: 5px; text-decoration: none;">Update</a>
+            <a href="{% url 'delete_task' card.id %}" class="btn btn-secondary text-light" style="display: block; margin: 5px; text-decoration: none;">Delete</a>
         </div>
     </div>
     {% empty %}
