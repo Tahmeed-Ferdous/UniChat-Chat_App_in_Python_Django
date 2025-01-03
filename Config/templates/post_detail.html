@@ -54,7 +54,7 @@
                                 </a>
                             {% endif %}
                             <a href="{% url 'postlike' post.id %}" class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-check-circle"></i> {{ post.likes }} Badges
+                                <i class='bx bxs-medal'></i> {{ post.likes }}
                             </a>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                             <div class="d-flex align-items-start">
                                 <div class="me-3">
                                     {% if comment.user.profile.picture %}
-                                        <img src="{{ comment.user.profile.picture.url }}" alt="User Image" class="rounded-circle" style="width: 80px; height: 50px;">
+                                        <img src="{{ comment.user.profile.picture.url }}" alt="User Image" class="rounded-circle" style="width: 40px; height: 40px;">
                                     {% else %}
                                         <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder Image" class="rounded-circle" style="width: 40px; height: 40px;">
                                     {% endif %}
