@@ -5,90 +5,15 @@
 
 {% block content %}
 
-<!-- <div class="container mt-5">
-    <h1 class="text-center mb-4 fs-4">Weekly Schedule</h1>
-    <table class="table table-bordered text-center">
-        <thead class="table-light fs-5">
-            <tr>
-                
-                <th scope="col">Time</th>
-                <th scope="col">Sunday</th>
-                <th scope="col">Monday</th>
-                <th scope="col">Tuesday</th>
-                <th scope="col">Wednesday</th>
-                <th scope="col">Thursday</th>
-                <th scope="col">Friday</th>
-                <th scope="col">Saturday</th>
-            </tr>
-        </thead>
-        <tbody class="fs-5">
-            <tr>
-                <td>8:00 - 9:20</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>9:30 - 10:50</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>11:00 - 12:20</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>12:30 - 1:50</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>2:00 - 3:20</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>3:30 - 4:50</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-</div> -->
+
 <div class="container mt-4">
     <a href="{% url 'display_schedule' %}" class="btn btn-primary">
         Go to Weekly Schedule
     </a>
 </div>
 <div class="container mt-5">
-    
-    <!-- <h1 class="text-center mb-4 fs-4">Weekly Schedule</h1> -->
-    <table class="table table-bordered text-center">
-        <thead class="table-light fs-5">
+    <table class="table table-bordered text-center" style="border-collapse: collapse; width: 100%; font-size: 16px;">
+        <thead class="table-light">
             <tr>
                 <th scope="col">Time</th>
                 <th scope="col">Sunday</th>
@@ -100,8 +25,7 @@
                 <th scope="col">Saturday</th>
             </tr>
         </thead>
-        <!-- LAB FEATURE NOT ADDED -->
-        <tbody class="fs-5">
+        <tbody>
             {% for start, end in time_slots %}
             <tr>
                 <td>{{ start }} - {{ end }}</td>
@@ -121,6 +45,7 @@
         </tbody>
     </table>
 </div>
+
 
 
 
