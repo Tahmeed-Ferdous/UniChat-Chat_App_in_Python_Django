@@ -11,10 +11,17 @@ from django.db.models import Q
 def explore(request):
     user = request.user
 
-    following_profiles = Follow.objects.filter(follower=user)
-    followed_users = [friend.following for friend in following_profiles] 
+    from django.db import connection
 
-    followed_user_ids = [user.id for user in followed_users]
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT following_id FROM explore_follow WHERE follower_id = %s",
+            [user.id]
+        )
+        following_profiles = cursor.fetchall()
+
+    followed_user_ids = [row[0] for row in following_profiles]
+
     profile_suggestions = Profile.objects.filter(
         ~Q(user__in=followed_user_ids),
         ~Q(user=user),
@@ -22,9 +29,10 @@ def explore(request):
     )
 
     context = {
-        'following_profiles': followed_users,
+        'following_profiles': followed_user_ids,
         'profile_suggestions': profile_suggestions,
     }
     
     return render(request, 'explore/explore.html', context)
+
 

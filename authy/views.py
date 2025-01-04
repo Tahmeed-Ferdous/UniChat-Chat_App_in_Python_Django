@@ -8,66 +8,56 @@ from post.models import Post, Follow, Stream
 
 from authy.models import Profile
 from django.template import loader
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.core.paginator import Paginator
 from django.urls import resolve, reverse
 from django.db import transaction
 
 
-# Create your views here.
+from django.db import connection
+
 def UserProfile(request, username):
-	user = get_object_or_404(User, username=username)
-	profile = Profile.objects.get(user=user)
-	# 1
-	# profile = Profile.objects.raw("SELECT * FROM profile WHERE user_id = %s LIMIT 1", [user.id])
+    user = get_object_or_404(User, username=username)
+    profile = Profile.objects.get(user=user)
 
-	url_name = resolve(request.path).url_name
+    url_name = resolve(request.path).url_name
+
+    if url_name == 'profile':
+        posts = Post.objects.filter(user=user).order_by('-posted')
+    else:
+        posts = profile.favorites.all()
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT COUNT(*) FROM post_post WHERE user_id = %s", [user.id])
+        posts_count = cursor.fetchone()[0]
+
+        cursor.execute("SELECT COUNT(*) FROM post_follow WHERE follower_id = %s", [user.id])
+        following_count = cursor.fetchone()[0]
+
+        cursor.execute("SELECT COUNT(*) FROM post_follow WHERE following_id = %s", [user.id])
+        followers_count = cursor.fetchone()[0]
 	
-	if url_name == 'profile':
-		posts = Post.objects.filter(user=user).order_by('-posted')\
-		# 2
-		# posts = Post.objects.raw("SELECT * FROM post WHERE user_id = %s ORDER BY posted DESC", [user.id])
+    follow_status = Follow.objects.filter(following=user, follower=request.user).exists()
+    # Pagination
+    paginator = Paginator(posts, 8)
+    page_number = request.GET.get('page')
+    posts_paginator = paginator.get_page(page_number)
 
+    template = loader.get_template('profile.html')
 
-	else:
-		posts = profile.favorites.all()
+    context = {
+        'posts': posts_paginator,
+        'profile': profile,
+        'following_count': following_count,
+        'followers_count': followers_count,
+        'posts_count': posts_count,
+        'follow_status': follow_status,
+        'url_name': url_name,
+    }
 
-	#Profile info box
-	posts_count = Post.objects.filter(user=user).count()
-	# 3
-	# posts_count = Post.objects.raw("SELECT COUNT(*) FROM post WHERE user_id = %s", [user.id])
+    return HttpResponse(template.render(context, request))
 
-	following_count = Follow.objects.filter(follower=user).count()
-	# 4
-	# following_count=Follow.objects.raw("SELECT COUNT(*) FROM follow WHERE user_id =%s",[user.id])
-	followers_count = Follow.objects.filter(following=user).count()
-	#5
-	# followers_count=Follow.objects.raw("SELECT COUNT(*) FROM follow WHERE user_id=%s",[user.id])
-
-	#follow status
-	follow_status = Follow.objects.filter(following=user, follower=request.user).exists()
-	# 6
-	# follow_status = Follow.objects.raw("SELECT 1 FROM follow WHERE following_id = %s AND follower_id = %s LIMIT 1", [user.id, request.user.id]).exists()
-
-	#Pagination
-	paginator = Paginator(posts, 8)
-	page_number = request.GET.get('page')
-	posts_paginator = paginator.get_page(page_number)
-
-	template = loader.get_template('profile.html')
-
-	context = {
-		'posts': posts_paginator,
-		'profile':profile,
-		'following_count':following_count,
-		'followers_count':followers_count,
-		'posts_count':posts_count,
-		'follow_status':follow_status,
-		'url_name':url_name,
-	}
-
-	return HttpResponse(template.render(context, request))
 
 @login_required
 def custom_logout_view(request):
@@ -118,30 +108,38 @@ def PasswordChangeDone(request):
 	return render(request, 'change_password_done.html')
 
 
+
 @login_required
 def EditProfile(request):
-	user = request.user.id
-	profile = Profile.objects.get(user__id=user)
+    user = request.user.id
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM authy_profile WHERE user_id = %s", [user])
+        profile_data = cursor.fetchone()
+        if profile_data:
+            profile = Profile.objects.get(pk=profile_data[0])
+        else:
+            raise Http404("Profile not found")
 
-	if request.method == 'POST':
-		form = EditProfileForm(request.POST, request.FILES)
-		if form.is_valid():
-			profile.picture = form.cleaned_data.get('picture')
-			profile.first_name = form.cleaned_data.get('first_name')
-			profile.last_name = form.cleaned_data.get('last_name')
-			profile.location = form.cleaned_data.get('location')
-			profile.url = form.cleaned_data.get('url')
-			profile.profile_info = form.cleaned_data.get('profile_info')
-			profile.save()
-			return redirect('index')
-	else:
-		form = EditProfileForm()
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile.picture = form.cleaned_data.get('picture')
+            profile.first_name = form.cleaned_data.get('first_name')
+            profile.last_name = form.cleaned_data.get('last_name')
+            profile.location = form.cleaned_data.get('location')
+            profile.url = form.cleaned_data.get('url')
+            profile.profile_info = form.cleaned_data.get('profile_info')
+            profile.save()
+            return redirect('index')
+    else:
+        form = EditProfileForm()
 
-	context = {
-		'form':form,
-	}
+    context = {
+        'form': form,
+    }
 
-	return render(request, 'edit_profile.html', context)
+    return render(request, 'edit_profile.html', context)
+
 
 
 

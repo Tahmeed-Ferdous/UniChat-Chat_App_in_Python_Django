@@ -14,19 +14,19 @@
         </h4>
       </div>
       <div class="col-auto">
-        {% if user.profile.picture %}
-        <a href="{{ user.profile.get_absolute_url }}">
-          <img class="rounded-circle img-fluid border" 
-               src="{{ user.profile.picture.url }}" 
-               alt="Profile Picture" 
-               style="width: 60px; height: 60px; object-fit: cover;">
+        <a href="{% url 'profile' request.user.username %}">
+          {% if user.profile.picture %}
+            <img class="rounded-circle img-fluid border" 
+                 src="{{ user.profile.picture.url }}" 
+                 alt="Profile Picture" 
+                 style="width: 60px; height: 60px; object-fit: cover;">
+          {% else %}
+            <img class="rounded-circle img-fluid border" 
+                 src="{% static 'img/person.jpg' %}" 
+                 alt="Pic" 
+                 style="width: 60px; height: 60px; object-fit: cover;">
+          {% endif %}
         </a>
-        {% else %}
-        <img class="rounded-circle img-fluid border" 
-             src="{% static 'img/person.jpg' %}" 
-             alt="Pic" 
-             style="width: 60px; height: 60px; object-fit: cover;">
-        {% endif %}
       </div>
     </div>
   

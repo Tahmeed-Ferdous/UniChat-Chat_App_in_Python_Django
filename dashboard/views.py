@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.conf import settings
 import random
 
+from django.db import connection
+
 def dashboard(request):
     error_message = None
 
@@ -15,10 +17,12 @@ def dashboard(request):
         task = request.POST.get('task')
         title = request.POST.get('title')
         img = request.FILES.get('img')
-        # start_time, days
         
         if name and task and not title and not img:
-            Tasks.objects.create(name=name, task=task)
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "INSERT INTO dashboard_tasks (name, task) VALUES (%s, %s)", [name, task]
+                )
             return redirect('dashboard')
 
         elif name and title and task and img:
@@ -28,8 +32,8 @@ def dashboard(request):
                 Tasks.objects.create(name=name, title=title, task=task, img=img)
                 return redirect('dashboard')
 
-    tasks = Tasks.objects.exclude(name='', task='') 
-    cards = Tasks.objects.exclude(title='', img='') 
+    tasks = Tasks.objects.exclude(name='', task='').order_by('id')
+    cards = Tasks.objects.exclude(title='', img=None)
 
     def extract_last_two_digits(task_obj):
         try:
@@ -38,12 +42,14 @@ def dashboard(request):
             return float('inf')
 
     sorted_tasks = sorted(tasks, key=extract_last_two_digits)
+
     return render(request, 'dashboard.html', {
         'tasks': sorted_tasks,
         'cards': cards,
         'error': error_message
     })
-# routine planner views function to update the time table
+
+
 def add_course(request):
     error_message=None
     if request.method == 'POST':
@@ -127,7 +133,7 @@ def send_mail_req(request):
 
     if request.method == 'POST':
         sender_email = request.POST.get('sender_email')
-        recipient_email = request.POST.get('recipient_email') # No longer a select
+        recipient_email = request.POST.get('recipient_email') 
         template_type = request.POST.get('template_type')
 
         if sender_email and recipient_email and template_type in templates:
@@ -141,7 +147,7 @@ def send_mail_req(request):
                     email_subject,
                     email_body,
                     sender_email,
-                    [recipient_email],  # Still a list for send_mail
+                    [recipient_email], 
                     fail_silently=False,
                 )
                 messages.success(request, "Email sent successfully!")
@@ -150,4 +156,4 @@ def send_mail_req(request):
         else:
             messages.error(request, "Invalid input. Please fill out the form correctly.")
 
-    return render(request, 'dashboard.html') # No need to pass recipients
+    return render(request, 'dashboard.html')
