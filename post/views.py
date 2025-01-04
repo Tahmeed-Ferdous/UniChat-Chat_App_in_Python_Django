@@ -17,7 +17,7 @@ from comment.forms import CommentForm
 @never_cache
 def index(request):
 	user = request.user
-	posts = Stream.objects.filter(user=user)
+	posts = Stream.objects.raw("SELECT * FROM post_stream WHERE user_id = %s", [user.id])
 
 	group_ids = []
 
@@ -38,7 +38,7 @@ def index(request):
 def PostDetails(request, post_id):
 	post = get_object_or_404(Post, id=post_id)
 	user = request.user
-	profile = Profile.objects.get(user=user)
+	profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [user.id])
 	favorited = False
 
     #comment
@@ -57,8 +57,7 @@ def PostDetails(request, post_id):
 		form = CommentForm()
 	
 	if request.user.is_authenticated:
-		profile = Profile.objects.get(user=user)
-		#For the color of the favorite button
+		profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [user.id])[0]
 		if profile.favorites.filter(id=post_id).exists():
 			favorited = True
 	template = loader.get_template('post_detail.html')
@@ -105,17 +104,28 @@ def NewPost(request):
 
 @login_required
 def tags(request, tag_slug):
-	tag = get_object_or_404(Tag, slug=tag_slug)
-	posts = Post.objects.filter(tags=tag).order_by('-posted')
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    tag_id = tag.id
 
-	template = loader.get_template('tags.html')
+    posts = Post.objects.raw(
+        """
+        SELECT post_post.* 
+        FROM post_post
+        INNER JOIN post_post_tags ON post_post.id = post_post_tags.post_id
+        WHERE post_post_tags.tag_id = %s
+        ORDER BY post_post.posted DESC
+        """,
+        [tag_id]
+    )
 
-	context = {
-		'posts':posts,
-		'tag':tag,
-	}
+    template = loader.get_template('tags.html')
+    context = {
+        'posts': posts,
+        'tag': tag,
+    }
 
-	return HttpResponse(template.render(context, request))
+    return HttpResponse(template.render(context, request))
+
 
 
 @login_required
@@ -142,13 +152,13 @@ def like(request, post_id):
 
 @login_required
 def favorite(request, post_id):
-	post = Post.objects.get(id=post_id)
-	profile = Profile.objects.get(user=request.user)
+    post = Post.objects.get(id=post_id)
+    profile = Profile.objects.raw("SELECT * FROM authy_profile WHERE user_id = %s", [request.user.id])[0]
 
-	if profile.favorites.filter(id=post_id).exists():
-		profile.favorites.remove(post)
+    if profile.favorites.filter(id=post_id).exists():
+        profile.favorites.remove(post)
 
-	else:
-		profile.favorites.add(post)
+    else:
+        profile.favorites.add(post)
 
-	return HttpResponseRedirect(reverse('postdetails', args=[post_id]))
+    return HttpResponseRedirect(reverse('postdetails', args=[post_id]))
