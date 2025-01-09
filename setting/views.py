@@ -23,30 +23,30 @@ def update_contact_info(request):
 
 @login_required
 def change_password(request):
-    # Add your change_password logic here
+
     return render(request, 'change_password.html')
 
 @login_required
 def privacy_settings(request):
-    # Add your privacy_settings logic here
+
     return render(request, 'privacy_settings.html')
 
 @login_required
 def notification_settings(request):
-    # Add your notification_settings logic here
+
     return render(request, 'notification_settings.html')
 
 @login_required
 def blocked_users(request):
-    # Add your blocked_users logic here
+
     return render(request, 'blocked_users.html')
 
 @login_required
 def linked_accounts(request):
-    # Add your linked_accounts logic here
+
     return render(request, 'linked_accounts.html')
 
 @login_required
 def delete_account(request):
-    # Add your delete_account logic here
+
     return render(request, 'delete_account.html')

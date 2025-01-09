@@ -32,6 +32,7 @@ def dashboard(request):
                 Tasks.objects.create(name=name, title=title, task=task, img=img)
                 return redirect('dashboard')
 
+
     tasks = Tasks.objects.exclude(name='', task='').order_by('id')
     cards = Tasks.objects.exclude(title='', img=None)
 
@@ -64,7 +65,8 @@ def add_course(request):
 from datetime import datetime
 
 def displayOnSchedule(request):
-    courses = Tasks.objects.all().exclude(start_time__isnull=True).exclude(days__isnull=True)
+    # courses = Tasks.objects.all().exclude(start_time__isnull=True).exclude(days__isnull=True)
+    courses=Tasks.objects.raw("SELECT * FROM dashboard_tasks WHERE start_time IS NOT NULL AND days IS NOT NULL;")
     timetable_data = {
         'Sunday': {},
         'Monday': {},
