@@ -33,7 +33,12 @@
                     <td>
                         {% if timetable_data|dict_key:day|dict_key:start %}
                             {% for course in timetable_data|dict_key:day|dict_key:start %}
-                                <div>{{ course }}</div>
+                                <div class="timetable-entry" id="entryId" data-entry-id="40">
+                                    <span>{{ course }}</span>
+                                    <a href="{% url 'delete_course' %}">
+                                    <button class="alert alert-danger" style="display: inline-block;"> Delete
+                                    </button></a>
+                                </div>
                             {% endfor %}
                         {% else %}
                             <div>-</div>
@@ -43,6 +48,7 @@
             </tr>
             {% endfor %}
         </tbody>
+        
     </table>
 </div>
 
@@ -192,7 +198,8 @@
 
 
 
-
-
-
 {% endblock %}
+
+
+
+
