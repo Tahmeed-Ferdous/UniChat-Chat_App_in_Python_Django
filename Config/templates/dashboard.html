@@ -5,52 +5,99 @@
 
 {% block content %}
 
-
-<div class="container mt-4">
-    <a href="{% url 'display_schedule' %}" class="btn btn-primary">
-        Go to Weekly Schedule
-    </a>
-</div>
 <div class="container mt-5">
-    <table class="table table-bordered text-center" style="border-collapse: collapse; width: 100%; font-size: 16px;">
-        <thead class="table-light">
-            <tr>
-                <th scope="col">Time</th>
-                <th scope="col">Sunday</th>
-                <th scope="col">Monday</th>
-                <th scope="col">Tuesday</th>
-                <th scope="col">Wednesday</th>
-                <th scope="col">Thursday</th>
-                <th scope="col">Friday</th>
-                <th scope="col">Saturday</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for start, end in time_slots %}
-            <tr>
-                <td>{{ start }} - {{ end }}</td>
-                {% for day in timetable_data.keys %}
-                    <td>
+    <style>
+        /* Custom styles for the specific timetable */
+        .custom-timetable {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .custom-timetable th, .custom-timetable td {
+            padding: 8px; /* Uniform padding for table cells */
+            text-align: center; /* Center alignment for content */
+        }
+        .custom-timetable .free-time {
+            background-color: #d9e8fa; /* Light blue background for free time */
+            color: #0c5460; /* Darker text for readability */
+        }
+        .custom-timetable .course-entry {
+            background-color: #f5fcf6; /* Light green background for course entries */
+            color: #181818; /* Dark color for text */
+            padding: 8px;
+            border-radius: 4px;
+            transition: transform 0.2s; /* Smooth transform for hover effects */
+        }
+        .custom-timetable .course-entry:hover {
+            transform: scale(1.05); /* Slight scale-up effect on hover */
+        }
+        .custom-timetable th {
+            background-color: #6c757d; /* Bootstrap's secondary color for headers */
+            color: white;
+        }
+        .custom-timetable td:hover {
+            background-color: #f8f9fa; /* Light grey background on hover for cells */
+        }
+
+        /* Ensuring links have no underlines and the hover effect is clear */
+        .custom-timetable a {
+            text-decoration: none; /* Removes underline from all links */
+        }
+        .custom-timetable a:hover {
+            text-decoration: none; /* Keeps links clean on hover */
+        }
+
+        /* Specifically targeting only the 'display_schedule' link for styling */
+        .schedule-link {
+            display: block; /* Makes the link cover the table's area */
+            text-decoration: none; /* Ensures no underline appears */
+            color: inherit; /* Inherits color from parent */
+        }
+    </style>
+
+    <!-- Specific link placement for 'display_schedule' -->
+    <a href="{% url 'display_schedule' %}" class="schedule-link">
+        <table class="table table-bordered text-center custom-timetable fs-6">
+            <thead class="thead-dark fs-6">
+                <tr>
+                    <th scope="col">Time</th>
+                    <th scope="col">Sunday</th>
+                    <th scope="col">Monday</th>
+                    <th scope="col">Tuesday</th>
+                    <th scope="col">Wednesday</th>
+                    <th scope="col">Thursday</th>
+                    <th scope="col">Friday</th>
+                    <th scope="col">Saturday</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for start, end in time_slots %}
+                <tr>
+                    <td>{{ start }} - {{ end }}</td>
+                    {% for day in timetable_data.keys %}
                         {% if timetable_data|dict_key:day|dict_key:start %}
+                        <td>
                             {% for course in timetable_data|dict_key:day|dict_key:start %}
-                                <div class="timetable-entry" id="entryId" data-entry-id="40">
-                                    <span>{{ course }}</span>
-                                    <a href="{% url 'delete_course' %}">
-                                    <button class="alert alert-danger" style="display: inline-block;"> Delete
-                                    </button></a>
+                                <div class="course-entry">
+                                    {{ course.name }}
+                                    <br>
+                                    <a href="{% url 'delete_task' course.id %}" class="btn btn-sm btn-danger mt-1">Delete</a>
                                 </div>
                             {% endfor %}
+                        </td>
                         {% else %}
-                            <div>-</div>
+                        <td class="free-time">
+                            <div>Free Time</div>
+                        </td>
                         {% endif %}
-                    </td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-        
-    </table>
+            </tbody>
+        </table>
+    </a>
 </div>
+
+
 
 
 

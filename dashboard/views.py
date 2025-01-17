@@ -65,18 +65,16 @@ def add_course(request):
 from datetime import datetime
 
 def displayOnSchedule(request):
-    # courses = Tasks.objects.all().exclude(start_time__isnull=True).exclude(days__isnull=True)
-    courses=Tasks.objects.raw("SELECT * FROM dashboard_tasks WHERE start_time IS NOT NULL AND days IS NOT NULL;")
+    # Fetch all tasks that have a defined start time and days
+    courses = Tasks.objects.exclude(start_time__isnull=True).exclude(days__isnull=True)
+
+    # Initialize the structure for organizing timetable data
     timetable_data = {
-        'Sunday': {},
-        'Monday': {},
-        'Tuesday': {},
-        'Wednesday': {},
-        'Thursday': {},
-        'Friday': {},
-        'Saturday': {}
+        'Sunday': {}, 'Monday': {}, 'Tuesday': {}, 'Wednesday': {},
+        'Thursday': {}, 'Friday': {}, 'Saturday': {}
     }
 
+    # Populate the timetable data with course information
     for course in courses:
         days = course.days.split(',')
         for day in days:
@@ -85,23 +83,20 @@ def displayOnSchedule(request):
                 time_slot = course.start_time.strftime('%H:%M')
                 if time_slot not in timetable_data[day]:
                     timetable_data[day][time_slot] = []
-                timetable_data[day][time_slot].append(course.name)
+                # Include the course name and its ID for deletion
+                timetable_data[day][time_slot].append({'name': course.name, 'id': course.id})
     
-    # Define proper time intervals
+    # Defined time slots
     time_slots = [
-        ("08:00", "09:20"),
-        ("09:30", "10:50"),
-        ("11:00", "12:20"),
-        ("12:30", "1:50"),
-        ("2:00", "3:20"),
-        ("3:30", "4:50"),
+        ("08:00", "09:20"), ("09:30", "10:50"), ("11:00", "12:20"),
+        ("12:30", "1:50"), ("2:00", "3:20"), ("3:30", "4:50"),("5:00", "6:20")
     ]
-    
 
     return render(request, 'dashboard.html', {
         'timetable_data': timetable_data,
         'time_slots': time_slots
     })
+
 
 
 
