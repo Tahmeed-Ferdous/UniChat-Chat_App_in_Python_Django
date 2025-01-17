@@ -4,7 +4,7 @@ from datetime import time
 
 class Tasks(models.Model):
     name = models.CharField(max_length=100)
-    task = models.CharField(max_length=255, default='New Task')
+    task = models.CharField(max_length=255, default='Create Task')
     title = models.CharField(max_length=128, default='N/A')
     img = models.ImageField(upload_to='images/', default='def.png', null=True, blank=True)
     start_time=models.TimeField(max_length=100, null=True,blank=True)

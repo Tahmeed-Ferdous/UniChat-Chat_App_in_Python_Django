@@ -41,39 +41,65 @@
       <a href="{% url 'usersearch' %}" class="button is-success is-fullwidth" style="text-decoration: none;">New Message</a>
     </aside>
   </div>
-
-  <!-- Chat Content -->
-  <div class="column is-three-quarters">
-    <div 
-      class="box" 
-      style="overflow-y: auto; height: calc(100vh - 200px); border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px;"
-    >
-      {% if directs %}
-        {% for direct in directs %}
-        <div class="media" style="margin-bottom: 10px;">
-          <figure class="media-left">
-            <p class="image is-48x48">
-              {% if direct.sender.profile.picture %}
-                <img src="{{ direct.sender.profile.picture.url }}" alt="{{ direct.sender.username }}">
-              {% else %}
-                <img src="{% static 'default_profile_picture.png' %}" alt="Default Profile">
-              {% endif %}
-            </p>
-          </figure>
-          <div class="media-content">
-            <p class="fs-6">
-              <strong>{{ direct.sender.profile.first_name }} {{ direct.sender.profile.last_name }}</strong> 
-              <small style="color: gray;">@{{ direct.sender.username }}</small>
-              <span style="float: right; font-size: 12px; color: gray;">{{ direct.date|date:'M d, H:i' }}</span>
-            </p>
-            <p class="fs-6">{{ direct.body }}</p>
-          </div>
-        </div>
-        {% endfor %}
-      {% else %}
-      <p style="text-align: center; color: gray;">No messages yet. Start a conversation!</p>
-      {% endif %}
-    </div>
+  
+    <!-- Chat Content -->
+    <div class="column is-three-quarters">
+      <div 
+        class="box" 
+        style="overflow-y: auto; height: calc(100vh - 200px); border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px;"
+      >
+        {% if directs %}
+          {% for direct in directs %}
+          <!-- Check if the sender is the logged-in user -->
+          {% if direct.sender.username == request.user.username %}
+            <!-- Message by the logged-in user (Sender) -->
+            <div class="media" style="margin-bottom: 10px; justify-content: flex-start;">
+              <figure class="media-left">
+                <p class="image is-48x48">
+                  {% if direct.sender.profile.picture %}
+                    <img src="{{ direct.sender.profile.picture.url }}" alt="{{ direct.sender.username }}">
+                  {% else %}
+                    <img src="{% static 'default_profile_picture.png' %}" alt="Default Profile">
+                  {% endif %}
+                </p>
+              </figure>
+              <div class="media-content">
+                <p class="fs-6">
+                  <strong>{{ direct.sender.profile.first_name }} {{ direct.sender.profile.last_name }}</strong> 
+                  <small style="color: gray;">@{{ direct.sender.username }}</small>
+                  <span style="float: right; font-size: 12px; color: gray;">{{ direct.date|date:'M d, H:i' }}</span>
+                </p>
+                <p class="fs-6">{{ direct.body }}</p>
+              </div>
+            </div>
+          {% else %}
+            <!-- Message by the other user (Receiver) -->
+            <div class="media" style="margin-bottom: 5px; justify-content: flex-end;">
+              <div class="media-content" style="text-align: right;">
+                <p class="fs-6">
+                  <strong>{{ direct.sender.profile.first_name }} {{ direct.sender.profile.last_name }}</strong> 
+                  <small style="color: gray;">@{{ direct.sender.username }}</small>
+                  <span style="float: left; font-size: 12px; color: gray;">{{ direct.date|date:'M d, H:i' }}</span>
+                </p>
+                <p class="fs-6">{{ direct.body }}</p>
+              </div>
+              <figure class="media-right">
+                <p class="image is-48x48">
+                  {% if direct.sender.profile.picture %}
+                    <img src="{{ direct.sender.profile.picture.url }}" alt="{{ direct.sender.username }}">
+                  {% else %}
+                    <img src="{% static 'default_profile_picture.png' %}" alt="Default Profile">
+                  {% endif %}
+                </p>
+              </figure>
+            </div>
+          {% endif %}
+          {% endfor %}
+        {% else %}
+          <p style="text-align: center; color: gray;">No messages yet. Start a conversation!</p>
+        {% endif %}
+      </div>
+  
 
     <!-- Message Input -->
     <form 

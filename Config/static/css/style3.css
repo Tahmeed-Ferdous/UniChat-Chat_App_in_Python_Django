@@ -312,6 +312,53 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
+/* Dropdown container hidden by default */
+.dropdown-container {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-left: 85px; /* Submenu indent */
+    background-color: var(--sidebar-color); /* Matches sidebar background */
+    border-radius: 6px;
+}
 
 
+/* Submenu Items */
+.dropdown-container .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--text-color);
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: var(--tran-03);
+}
+
+/* Hover Effect for Submenu Items */
+.dropdown-container .nav-link:hover {
+    background-color: var(--primary-color);
+    color: var(--sidebar-color);
+}
+
+/* Dark Mode Adjustments */
+body.dark .dropdown-container .nav-link:hover {
+    background-color: var(--text-color);
+    color: var(--black-color);
+}
+
+/* When the parent link is clicked, show the submenu */
+.dropdown-btn .dropdown-container.show {
+    display: block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    text-decoration: none;
+    color: transparent;
+    display: flex;
+    align-items: center;
+}

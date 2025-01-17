@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Skill Circle</title>
-    <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style3.css' %}">
     <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/styledashboard.css' %}">
 
@@ -40,19 +40,40 @@
             </a>
           </li>
           <ul class="menu-links">
-            <li class="nav-link">
-              <a href="{% url 'dashboard' %}">
+            <li class="dropdown-btn">
+              <a href="javascript:void(0)" class="dropdown-toggle">
                 <i class='bx bxs-dashboard icon'></i>
                 <span class="text nav-text">Dashboard</span>
               </a>
+              <ul class="dropdown-container">
+                <li class="nav-link">
+                  <a href="{% url 'display_schedule' %}">
+                    <i class='bx bx-bar-chart-alt-2 icon'></i>
+                    <span class="text nav-text">Routine</span>
+                  </a>
+                </li>
+                <li class="nav-link">
+                  <a href="{% url 'listing' %}">
+                    <i class='bx bx-line-chart icon'></i>
+                    <span class="text nav-text">Listing</span>
+                  </a>
+                </li>
+                <li class="nav-link">
+                  <a href="">
+                    <i class='bx bx-chat icon'></i>
+                    <span class="text nav-text">Send Mail</span>
+                  </a>
+                </li>
+              </ul>
             </li>
+            
             <li class="nav-link">
               <a href="{% url 'show-notifications' %}">
                 <i class='bx bx-bell icon'></i>
-                <span class="text nav-text">Reminders</span>
+                <span class="text nav-text">Reminders
                 {% if count_notifications %}
-                  <span class="badge">{{ count_notifications }}</span>
-                {% endif %}
+                  <span class="badge p-1 ml-2" style="color: white; background-color: red; border-radius: 50%;">{{ count_notifications }}</span>
+                {% endif %}</span>
               </a>
             </li>
             <li class="nav-link">

@@ -9,7 +9,7 @@ import random
 
 from django.db import connection
 
-def dashboard(request):
+def listing(request):
     error_message = None
 
     if request.method == 'POST':
@@ -23,14 +23,14 @@ def dashboard(request):
                 cursor.execute(
                     "INSERT INTO dashboard_tasks (name, task) VALUES (%s, %s)", [name, task]
                 )
-            return redirect('dashboard')
+            return redirect('listing')
 
         elif name and title and task and img:
             if Tasks.objects.filter(name=name).exists():
                 error_message = "A user with this name already exists."
             else:
                 Tasks.objects.create(name=name, title=title, task=task, img=img)
-                return redirect('dashboard')
+                return redirect('listing')
 
 
     tasks = Tasks.objects.exclude(name='', task='').order_by('id')
@@ -44,7 +44,7 @@ def dashboard(request):
 
     sorted_tasks = sorted(tasks, key=extract_last_two_digits)
 
-    return render(request, 'dashboard.html', {
+    return render(request, 'listing.html', {
         'tasks': sorted_tasks,
         'cards': cards,
         'error': error_message
@@ -60,7 +60,7 @@ def add_course(request):
         if name and start_time and days:
             Tasks.objects.create(name=name, start_time=start_time, days=days)
             
-            return redirect('dashboard')
+            return redirect('routine')
 # function to display added courses
 from datetime import datetime
 
@@ -92,21 +92,20 @@ def displayOnSchedule(request):
         ("12:30", "1:50"), ("2:00", "3:20"), ("3:30", "4:50"),("5:00", "6:20")
     ]
 
-    return render(request, 'dashboard.html', {
+    return render(request, 'routine.html', {
         'timetable_data': timetable_data,
         'time_slots': time_slots
     })
 
-
-
-
-
-
-
 def delete_task(request, task_id):
     task = Tasks.objects.get(id=task_id)
     task.delete()
-    return redirect('dashboard')
+    return redirect('listing')
+
+def delete_taskr(request, task_id):
+    task = Tasks.objects.get(id=task_id)
+    task.delete()
+    return redirect('routine')
 
 def edit_task(request, id):
     task = get_object_or_404(Tasks, id=id)
@@ -114,7 +113,7 @@ def edit_task(request, id):
         task.name = request.POST.get('name')
         task.task = request.POST.get('task')
         task.save()
-        return redirect('dashboard')
+        return redirect('listing')
     return render(request, 'edit.html', {'task': task})
 
 from django.shortcuts import render
@@ -153,4 +152,4 @@ def send_mail_req(request):
         else:
             messages.error(request, "Invalid input. Please fill out the form correctly.")
 
-    return render(request, 'dashboard.html')
+    return render(request, 'send_mail.html')
