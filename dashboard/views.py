@@ -16,25 +16,24 @@ def listing(request):
         name = request.POST.get('name')
         task = request.POST.get('task')
         title = request.POST.get('title')
-        img = request.FILES.get('img')
         
-        if name and task and not title and not img:
+        if name and task and not title:
             with connection.cursor() as cursor:
                 cursor.execute(
                     "INSERT INTO dashboard_tasks (name, task) VALUES (%s, %s)", [name, task]
                 )
             return redirect('listing')
 
-        elif name and title and task and img:
+        elif name and title and task:
             if Tasks.objects.filter(name=name).exists():
                 error_message = "A user with this name already exists."
             else:
-                Tasks.objects.create(name=name, title=title, task=task, img=img)
+                Tasks.objects.create(name=name, title=title, task=task)
                 return redirect('listing')
 
 
     tasks = Tasks.objects.exclude(name='', task='').order_by('id')
-    cards = Tasks.objects.exclude(title='', img=None)
+    cards = Tasks.objects.exclude(title='')
 
     def extract_last_two_digits(task_obj):
         try:
@@ -60,7 +59,7 @@ def add_course(request):
         if name and start_time and days:
             Tasks.objects.create(name=name, start_time=start_time, days=days)
             
-            return redirect('routine')
+            return redirect('display_schedule')
 # function to display added courses
 from datetime import datetime
 
@@ -80,22 +79,22 @@ def displayOnSchedule(request):
         for day in days:
             day = day.strip()
             if day in timetable_data:
-                time_slot = course.start_time.strftime('%H:%M')
+                time_slot = course.start_time.strftime('%I:%M %p')  # Convert to 12-hour format
                 if time_slot not in timetable_data[day]:
                     timetable_data[day][time_slot] = []
-                # Include the course name and its ID for deletion
                 timetable_data[day][time_slot].append({'name': course.name, 'id': course.id})
     
-    # Defined time slots
+    # Define time slots in 12-hour format
     time_slots = [
-        ("08:00", "09:20"), ("09:30", "10:50"), ("11:00", "12:20"),
-        ("12:30", "1:50"), ("2:00", "3:20"), ("3:30", "4:50"),("5:00", "6:20")
+        ("08:00 AM", "09:20 AM"), ("09:30 AM", "10:50 AM"), ("11:00 AM", "12:20 PM"),
+        ("12:30 PM", "01:50 PM"), ("02:00 PM", "03:20 PM"), ("03:30 PM", "04:50 PM")
     ]
 
     return render(request, 'routine.html', {
         'timetable_data': timetable_data,
         'time_slots': time_slots
     })
+
 
 def delete_task(request, task_id):
     task = Tasks.objects.get(id=task_id)
@@ -105,7 +104,7 @@ def delete_task(request, task_id):
 def delete_taskr(request, task_id):
     task = Tasks.objects.get(id=task_id)
     task.delete()
-    return redirect('routine')
+    return redirect('display_schedule')
 
 def edit_task(request, id):
     task = get_object_or_404(Tasks, id=id)

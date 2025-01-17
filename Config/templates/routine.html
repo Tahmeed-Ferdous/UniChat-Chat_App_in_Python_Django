@@ -12,48 +12,70 @@
             width: 100%;
         }
         .custom-timetable th, .custom-timetable td {
-            padding: 8px; /* Uniform padding for table cells */
-            text-align: center; /* Center alignment for content */
+            padding: 8px;
+            text-align: center;
         }
         .custom-timetable .free-time {
-            background-color: #d9e8fa; /* Light blue background for free time */
-            color: #0c5460; /* Darker text for readability */
+            background-color: #d9e8fa;
+            color: #0c5460;
         }
         .custom-timetable .course-entry {
-            background-color: #f5fcf6; /* Light green background for course entries */
-            color: #181818; /* Dark color for text */
+            background-color: #ffffff;
+            color: #181818;
             padding: 8px;
             border-radius: 4px;
-            transition: transform 0.2s; /* Smooth transform for hover effects */
+            transition: transform 0.2s;
         }
         .custom-timetable .course-entry:hover {
-            transform: scale(1.05); /* Slight scale-up effect on hover */
+            transform: scale(1.05);
         }
         .custom-timetable th {
-            background-color: #6c757d; /* Bootstrap's secondary color for headers */
+            background-color: #6c757d;
             color: white;
         }
         .custom-timetable td:hover {
-            background-color: #f8f9fa; /* Light grey background on hover for cells */
+            background-color: #f8f9fa;
         }
-
-        /* Ensuring links have no underlines and the hover effect is clear */
         .custom-timetable a {
-            text-decoration: none; /* Removes underline from all links */
+            text-decoration: none;
         }
         .custom-timetable a:hover {
-            text-decoration: none; /* Keeps links clean on hover */
+            text-decoration: none;
         }
-
-        /* Specifically targeting only the 'display_schedule' link for styling */
         .schedule-link {
-            display: block; /* Makes the link cover the table's area */
-            text-decoration: none; /* Ensures no underline appears */
-            color: inherit; /* Inherits color from parent */
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        .info-box {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .info-box h5 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            color: #343a40;
+        }
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info-box ul li {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        .info-box ul li::before {
+            content: "• ";
+            color: #007bff;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-right: 8px;
         }
     </style>
 
-    <!-- Specific link placement for 'display_schedule' -->
     <a href="{% url 'display_schedule' %}" class="schedule-link">
         <table class="table table-bordered text-center custom-timetable fs-6">
             <thead class="thead-dark fs-6">
@@ -97,10 +119,9 @@
 </div>
 
 <div class="container py-5">
-    <!-- Forms Row -->
     <div class="row g-3">
         <!-- Routine Planner Form -->
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <form method="POST" enctype="multipart/form-data" class="p-4 bg-white shadow-sm rounded" action="{% url 'add_course' %}">
                 {% csrf_token %}
                 <h5 class="fs-5 text-center">Routine</h5>
@@ -109,15 +130,31 @@
                     <input type="text" id="name" name="name" class="form-control" placeholder="Enter course name">
                 </div>
                 <div class="mb-3">
-                    <label for="task" class="form-label fs-6">Class starting time</label>
-                    <input type="text" id="start_time" name="start_time" class="form-control" placeholder="Enter the starting time">
+                    <label for="start_time" class="form-label fs-6">Class Starting Time</label>
+                    <input type="time" id="start_time" name="start_time" class="form-control" placeholder="HH:MM" required>
                 </div>
                 <div class="mb-3">
-                    <label for="title" class="form-label fs-6">Class Days</label>
+                    <label for="days" class="form-label fs-6">Class Days</label>
                     <input type="text" id="days" name="days" class="form-control" placeholder="Days of the week when classes will take place">
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Add</button>
             </form>
+        </div>
+
+        <!-- Dynamic Description Section -->
+        <div class="col-lg-6">
+            <div class="info-box">
+                <h5>How to Use the Routine</h5>
+                <ul>
+                    <li>Review the timetable above to see your weekly schedule.</li>
+                    <li>Use the form on the left to add new courses and their respective times and days.</li>
+                    <li>Click the "Delete" button next to a course to remove it from your schedule.</li>
+                    <li>Ensure that time inputs follow the HH:MM format for accuracy(After 12 use PM)</li>
+                    <li>Use unique titles.</li>
+                    <li>Check out your free times easily.</li>
+                    <li>Collaborate with your team efficiently</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
