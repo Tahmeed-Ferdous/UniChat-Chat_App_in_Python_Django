@@ -34,7 +34,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "tahmeed.ferdous@g.bracu.ac.bd"
 EMAIL_HOST_PASSWORD = "wpgvtlhmpiwzljdm"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
