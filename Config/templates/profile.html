@@ -47,7 +47,7 @@
               <!-- Profile Stats -->
               <div class="d-flex justify-content-between text-center mt-3">
                 <div>
-                  <h6 class="text-muted">Posts</h6>
+                  <h6 class="text-muted">Works</h6>
                   <h5>{{ posts_count }}</h5>
                 </div>
                 <div>
@@ -85,9 +85,6 @@
         <ul class="nav nav-tabs justify-content-center mt-1 fs-5">
           <li class="nav-item">
             <a class="nav-link {% if url_name == 'profile' %}active{% endif %}" href="{% url 'profile' profile.user %}">Posts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if url_name == 'profilefavorites' %}active{% endif %}" href="{% url 'profilefavorites' profile.user %}">Saved</a>
           </li>
         </ul>
       </div>
@@ -139,7 +136,7 @@
     left: 10px;
     width: 2px;
     height: 100%;
-    background: #dee2e6; /* Light grey for the timeline */
+    background: #dee2e6; 
   }
   .date {
     position: relative;

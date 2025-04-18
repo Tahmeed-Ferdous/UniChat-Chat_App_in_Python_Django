@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>UNI-SOCIAL</title>
+    <title>UniChat</title>
     <link rel="stylesheet" href="{% static 'css/style3.css' %}">
     <link rel="stylesheet" href="{% static 'css/bulma.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/styledashboard.css' %}">
@@ -23,7 +23,7 @@
             <a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="logo"></a>
           </span>
           <div class="text header-text">
-            <span class="name">UNI-SOCIAL</span>
+            <span class="name">UniChat</span>
             <span class="profession">Collaborate Freely</span>
           </div>
         </div>
@@ -40,33 +40,21 @@
             </a>
           </li>
           <ul class="menu-links">
-            <li class="dropdown-btn">
-              <a href="javascript:void(0)" class="dropdown-toggle">
-                <i class='bx bxs-dashboard icon'></i>
-                <span class="text nav-text">Dashboard</span>
+            <li class="nav-link">
+              <a href="{% url 'profile' request.user %}">
+                <i class='bx bx-user icon'></i>
+                <span class="text nav-text">Profile</span>
               </a>
-              <ul class="dropdown-container">
-                <li class="nav-link">
-                  <a href="{% url 'display_schedule' %}">
-                    <i class='bx bx-bar-chart-alt-2 icon'></i>
-                    <span class="text nav-text">Routine</span>
-                  </a>
-                </li>
-                <li class="nav-link">
-                  <a href="{% url 'listing' %}">
-                    <i class='bx bx-line-chart icon'></i>
-                    <span class="text nav-text">Listing</span>
-                  </a>
-                </li>
-                <li class="nav-link">
-                  <a href="{% url 'send_mail' %}">
-                    <i class='bx bx-chat icon'></i>
-                    <span class="text nav-text">Send Mail</span>
-                  </a>
-                </li>
-              </ul>
             </li>
-            
+            <li class="nav-link">
+              <a href="{% url 'directs' request.user %}">
+                <i class='bx bx-chat icon'></i>
+                <span class="text nav-text">Messages</span>
+                {% if directs_counts %}
+                  <span class="text nav-text">{{ directs_count }}</span>
+                {% endif %}
+              </a>
+            </li>
             <li class="nav-link">
               <a href="{% url 'show-notifications' %}">
                 <i class='bx bx-bell icon'></i>
@@ -83,21 +71,6 @@
               </a>
             </li>
             <li class="nav-link">
-              <a href="{% url 'directs' request.user %}">
-                <i class='bx bx-chat icon'></i>
-                <span class="text nav-text">Messages</span>
-                {% if directs_counts %}
-                  <span class="text nav-text">{{ directs_count }}</span>
-                {% endif %}
-              </a>
-            </li>
-            <li class="nav-link">
-              <a href="{% url 'profile' request.user %}">
-                <i class='bx bx-user icon'></i>
-                <span class="text nav-text">Profile</span>
-              </a>
-            </li>
-            <li class="nav-link">
               <a href="{% url 'newpost' %}">
                 <i class='bx bx-upload icon'></i>
                 <span class="text nav-text">New Upload</span>
@@ -106,12 +79,6 @@
           </ul>
         </div>
         <div class="bottom-content">
-          <li class="nav-link">
-            <a href="{% url 'setting:settings_page' %}">
-              <i class='bx bxs-cog icon'></i>
-              <span class="text nav-text">Settings</span>
-            </a>
-          </li>
           <li class="nav-link">
             <a href="{% url 'logout' %}">
               <i class='bx bx-log-out icon'></i>

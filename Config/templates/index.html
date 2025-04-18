@@ -3,7 +3,6 @@
 
 {% block content %}
     <div class="row align-items-center">
-      <!-- Welcome Message in the Center -->
       <div class="col text-center">
         <h4 class="mb-3 mt-3">Welcome, 
           {% if request.user.profile.first_name %}
@@ -29,89 +28,46 @@
         </a>
       </div>
     </div>
-  
-<hr class="mb-4">
 
-<div class="container-fluid py-3">
-    <div class="row g-4">
-        {% for post_item in post_items %}
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card h-100 shadow-sm">
-                <!-- Image Section -->
-                <div class="card-image">
-                    {% if post_item.picture %}
-                    <a href="{{ post_item.get_absolute_url }}">
-                        <img src="{{ post_item.picture.url }}" 
-                             class="card-img-top rounded-top" 
-                             style="height: 200px; object-fit: cover;" 
-                             alt="Post Image">
-                    </a>
-                    {% else %}
-                    <img src="{% static 'media/def.png' %}" 
-                         class="card-img-top rounded-top" 
-                         alt="Default Image">
-                    {% endif %}
-                </div>
+    <!-- Landing Page Section -->
+    <div class="text-center mt-5">
+        <h1 class="display-3">Discover Amazing Features</h1>
+        <p class="lead">Explore our platform and enjoy the best user experience.</p>
+    </div>
 
-                <!-- Card Body -->
-                <div class="card-body">
-                    <!-- User Section -->
-                    <div class="d-flex align-items-center mb-3">
-                        <!-- User Picture -->
-                        <a href="{% url 'profile' post_item.user %}">
-                        {% if post_item.user.profile.picture %}
-                        <img src="{{ post_item.user.profile.picture.url }}" 
-                             alt="User Profile" 
-                             class="rounded-circle me-2" 
-                             style="width: 48px; height: 48px;">
-                        {% else %}
-                        <img src="{% static 'img/logo.png' %}" 
-                             alt="Default Profile" 
-                             class="rounded-circle me-2" 
-                             style="width: 48px; height: 48px;">
-                        {% endif %}
-                        </a>
-                        <!-- User Info -->
-                        <div class="flex-grow-1">
-                            <a href="{% url 'profile' post_item.user %}" class="text-decoration-none">
-                                <h6 class="mb-0 text-truncate fw-bold">
-                                    {% if post_item.user.profile.first_name %}
-                                    {{ post_item.user.profile.first_name }} {{ post_item.user.profile.last_name }}
-                                    {% else %}
-                                    BRAC University
-                                    {% endif %}
-                                </h6>
-                            </a>
-                            <p class="text-muted small mb-0 fs-6">@{{ post_item.user.username }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Post Caption -->
-                    <p class="card-text text-muted text-truncate mb-3 small fs-6" 
-                       style="max-height: 4.5em; overflow: hidden; line-height: 1.5em;">
-                        {{ post_item.caption }}
-                    </p>
-
-                    <!-- Tags -->
-                    <div class="fs-6">
-                        {% for tag in post_item.tags.all %}
-                        <a href="{{ tag.get_absolute_url }}" class="badge bg-primary text-decoration-none me-1">#{{ tag }}</a>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <!-- Card Footer -->
-                <div class="card-footer bg-light d-flex justify-content-between align-items-center text-muted small fs-6">
-                    <span><i class="bi bi-calendar fs-6"></i> <time datetime="{{ post_item.posted }}">{{ post_item.posted }}</time></span>
-                    <a href="{% url 'postlike' post_item.id %}" class="text-decoration-none">
-                        <i class='bx bxs-medal'></i>{{ post_item.likes }}
-                    </a>
-                </div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+            <img src="{% static 'img/feature1.jpg' %}" class="card-img-top" alt="Feature One">
+            <div class="card-body text-center">
+                <h5 class="card-title">Direct Messaging</h5>
+                <h4 class="card-text" style="font-size: medium;">Learn about our first amazing feature that helps you achieve more.</h4>
+            </div>
             </div>
         </div>
-        {% endfor %}
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+            <img src="{% static 'img/feature2.jpg' %}" class="card-img-top" alt="Feature Two">
+            <div class="card-body text-center">
+                <h5 class="card-title">Easy Search</h5>
+                <h4 class="card-text" style="font-size: medium;">Discover how this feature can simplify your search.</h4>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+            <img src="{% static 'img/feature3.jpg' %}" class="card-img-top" alt="Feature Three">
+            <div class="card-body text-center">
+                <h5 class="card-title">Daily Reminders</h5>
+                <h4 class="card-text" style="font-size: medium;">Explore the benefits of our third feature designed for you.</h4>
+            </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <div class="text-center mt-4">
+        <p class="text">Join us today and start your journey with our platform.</p>
+    </div>
 {% endblock %}
 
 {% block pagination %}

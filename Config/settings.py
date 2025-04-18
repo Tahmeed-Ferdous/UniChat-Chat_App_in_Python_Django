@@ -49,12 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'authy',
     'post',
-    'comment',
     'direct',
     'notifications',
-    'dashboard',
     'explore',
-    'setting'
 ]
 
 MIDDLEWARE = [
