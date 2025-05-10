@@ -87,30 +87,28 @@ def Directs(request, username):
 
     return render(request, 'direct/direct.html', context)
 
-
 @login_required
 def SendDirect(request):
     from_user = request.user
     to_user_username = request.POST.get('to_user')
     body = request.POST.get('body')
+    image = request.FILES.get('image')
 
     if request.method == 'POST':
-        to_user_query = """
-            SELECT * 
-            FROM auth_user 
-            WHERE username = %s
-        """
-        to_user_result = User.objects.raw(to_user_query, [to_user_username])
-        
-        if not to_user_result:
+        try:
+            to_user = User.objects.get(username=to_user_username)
+        except User.DoesNotExist:
             return HttpResponseBadRequest("User not found.")
-        
-        to_user = to_user_result[0]
-        
-        Message.send_message(from_user, to_user, body)
-        return redirect('inbox')
-    else:
-        return HttpResponseBadRequest()
+
+        if not body and not image:
+            return HttpResponseBadRequest("Empty message not allowed.")
+
+        Message.send_message(from_user, to_user, body=body, image=image)
+        return redirect('directs', username=to_user.username)
+
+    return HttpResponseBadRequest()
+
+
 
 
 def checkDirects(request):
